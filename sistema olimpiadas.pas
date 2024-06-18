@@ -45,6 +45,39 @@ registro_sedes: sedes;
 archivo_medallasXatletas: FILE OF medallasXatletas;
 registro_medallasXatletas: medallasXatletas;
 
+PROCEDURE crea_archivo_atletas;
+ BEGIN
+ rewrite(archivo_atletas);
+ close(archivo_atletas);
+ END;
+
+PROCEDURE crea_archivo_disciplinas;
+ BEGIN
+ rewrite(archivo_disciplinas);
+ close(archivo_disciplinas);
+ END;
+
+PROCEDURE crear_ archivo_participantes;
+ BEGIN
+ rewrite(archivo_participantes);
+ close(archivo_participantes);
+ END;
+
+PROCEDURE crear_archivo_sedes;
+ BEGIN
+ rewrite(archivo_sedes);
+ close(archivo_sedes);
+ END;
+
+PROCEDURE crear_archivo_medallasXatletas;
+ BEGIN
+ rewrite(archivo_medallasXatletas);
+ close(archivo_medallasXatletas);
+ END;
+
+
+
+
 PROCEDURE menu_principal;
 VAR
   opcion: integer;
@@ -97,6 +130,10 @@ assign(archivo_disciplinas,'C:\Users\JULIO\Desktop\sistema-olimpiadas\disciplina
 assign(archivo_participantes,'C:\Users\JULIO\Desktop\sistema-olimpiadas\participantes.dat');
 assign(archivo_sedes,'C:\Users\JULIO\Desktop\sistema-olimpiadas\sedes.dat');
 assign(archivo_medallasXatletas,'C:\Users\JULIO\Desktop\sistema-olimpiadas\medallasXatletas.dat');
+crea_archivo_atletas;
+crea_archivo_disciplinas;
+crear_ archivo_participantes;
+crear_archivo_sedes;
+crear_archivo_medallasXatletas;
 menu_principal;
-
 END.
