@@ -18,7 +18,7 @@ TYPE
                 END;
 
     participantes = RECORD
-                  cod_disciplina: integer;
+                  cod_disciplina: string;
                   anio_competencia: integer;
                   dni: string;
                   activo: boolean;
@@ -96,6 +96,16 @@ FUNCTION verificar_estado_archivo_disciplinas(): boolean;
  ELSE
   verificar_estado_archivo_disciplinas:= false;
  close(archivo_disciplinas);
+ END;
+
+FUNCTION verificar_estado_archivo_participantes(): boolean;
+ BEGIN
+ reset(archivo_participantes);
+ IF filesize(archivo_participantes) = 0 THEN
+  verificar_estado_archivo_participantes:= true
+ ELSE
+  verificar_estado_archivo_participantes:= false;
+ close(archivo_participantes);
  END;
 
 FUNCTION existe_documento(documento: string): boolean;
@@ -345,6 +355,79 @@ VAR
   END;
  END;
 
+PROCEDURE alta_participantes;
+VAR
+ opcion: string;
+ BEGIN
+ textcolor(white);
+ IF verificar_estado_archivo_participantes = true THEN
+  BEGIN
+  reset(archivo_participantes);
+  writeln('INGRESE LOS DATOS DE LOS PARTICIPANTES');
+  writeln('--------------------------------------');
+  writeln();
+  write('>>> Ingrese codigo de disciplina: ');
+  readln(registro_participantes.cod_disciplina);
+  writeln();
+  write('>>> Ingrese anio de competencia: ');
+  readln(registro_participantes.anio_competencia);
+  writeln();
+  write('>>> Ingrese DNI del participante: ');
+  readln(registro_participantes.dni);
+  registro_participantes.activo:= true;
+  seek(archivo_participantes,filesize(archivo_participantes));
+  write(archivo_participantes,registro_participantes);
+  close(archivo_participantes);
+  writeln();
+  textcolor(lightgreen);
+  writeln('=====================================================');
+  writeln('*** Participante cargado con exito y dado de alta ***');
+  writeln('=====================================================');
+  delay(2000);
+  END
+ ELSE
+  BEGIN
+  REPEAT
+  reset(archivo_participantes);
+ textcolor(white);
+  writeln('INGRESE LOS DATOS DE LOS PARTICIPANTES');
+  writeln('--------------------------------------');
+  writeln();
+  write('>>> Ingrese codigo de disciplina: ');
+  readln(registro_participantes.cod_disciplina);
+  writeln();
+  write('>>> Ingrese anio de competencia: ');
+  readln(registro_participantes.anio_competencia);
+  writeln();
+  write('>>> Ingrese DNI del participante: ');
+  readln(registro_participantes.dni);
+  registro_participantes.activo:= true;
+  seek(archivo_participantes,filesize(archivo_participantes));
+  write(archivo_participantes,registro_participantes);
+  close(archivo_participantes);
+  writeln();
+  textcolor(lightgreen);
+  writeln('=====================================================');
+  writeln('*** Participante cargado con exito y dado de alta ***');
+  writeln('=====================================================');
+  writeln();
+  REPEAT
+  textcolor(lightgreen);
+  write('Desea volver a cargar otro participante[s/n]?: ');
+  readln(opcion);
+  IF (opcion <> 's') AND (opcion <> 'n') THEN
+   BEGIN
+   textcolor(lightred);
+   writeln();
+   writeln('======================================');
+   writeln('X Valor incorrecto. Ingrese nuevamente');
+   writeln('======================================');
+   END;
+  UNTIL (opcion = 's') OR (opcion = 'n');
+  UNTIL (opcion = 'n');
+  END;
+ END;
+
 PROCEDURE menu_altas;
 VAR
    opcion: integer;
@@ -376,9 +459,11 @@ VAR
            clrscr;
            alta_disciplinas;
            END;
-        { 3:BEGIN
+         3:BEGIN
+           clrscr;
+           alta_participantes;
            END;
-         4:BEGIN
+      {   4:BEGIN
            END;
          5:BEGIN
            END; }
@@ -440,7 +525,7 @@ VAR
     writeln('9. Salir');
     writeln('---------------------------------------------------------------------------');
     writeln();
-    write('Seleccione una opcion <teclas del 1 al 9 inclusive>');
+    write('Seleccione una opcion <teclas del 1 al 9 inclusive>: ');
     readln(opcion);
     CASE opcion OF
          1: BEGIN
