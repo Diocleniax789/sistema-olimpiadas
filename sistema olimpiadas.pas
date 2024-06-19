@@ -11,7 +11,7 @@ TYPE
             END;
 
     disciplinas = RECORD
-                cod_disciplina: integer;
+                cod_disciplina: string;
                 descripcion: string;
                 equipo: string;
                 activo: boolean;
@@ -88,6 +88,16 @@ FUNCTION verifica_estado_archivo_atletas(): boolean;
   verifica_estado_archivo_atletas:= false;
  END;
 
+FUNCTION verificar_estado_archivo_disciplinas(): boolean;
+ BEGIN
+ reset(archivo_disciplinas);
+ IF filesize(archivo_disciplinas) = 0 THEN
+  verificar_estado_archivo_disciplinas:= true
+ ELSE
+  verificar_estado_archivo_disciplinas:= false;
+ close(archivo_disciplinas);
+ END;
+
 FUNCTION existe_documento(documento: string): boolean;
 VAR
  f: boolean;
@@ -102,6 +112,22 @@ VAR
    existe_documento:= true
   ELSE
    existe_documento:= false;
+ END;
+
+FUNCTION existe_disciplina(codigo_disciplina: string): boolean;
+VAR
+ f: boolean;
+ BEGIN
+ f:= false;
+ REPEAT
+ read(archivo_disciplinas,registro_disciplinas);
+ IF codigo_disciplina = registro_disciplinas.cod_disciplina THEN
+  f:= true;
+ UNTIL eof(archivo_disciplinas) OR (f = true);
+ IF f = true THEN
+  existe_disciplina:= true
+ ELSE
+  existe_disciplina:= false;
  END;
 
 PROCEDURE ordena_atletas_por_DNI();
@@ -211,6 +237,114 @@ VAR
  END;
 END;
 
+PROCEDURE alta_disciplinas;
+VAR
+ op,codigo_disciplina,opcion: string;
+ BEGIN
+ IF verificar_estado_archivo_disciplinas() = true THEN
+  BEGIN
+  reset(archivo_disciplinas);
+  writeln('INGRESE TODOS LOS DATOS DE LA DISCIPLINA');
+  writeln('----------------------------------------');
+  writeln();
+  write('>>> Ingrese codigo de disciplina: ');
+  readln(registro_disciplinas.cod_disciplina);
+  writeln();
+  write('>>> Ingrese la descripcion: ');
+  readln(registro_disciplinas.descripcion);
+  writeln();
+  REPEAT
+  write('>>> Disciplina en equipo[s/n]?: ');
+  readln(op);
+  IF (op <> 's') AND (op <> 'n') THEN
+   BEGIN
+   textcolor(lightred);
+   writeln();
+   writeln('=========================================');
+   writeln('X Valor incorrecto. Ingrese nuevamente X ');
+   writeln('=========================================');
+   END;
+  UNTIL (op = 's') OR (op = 'n');
+  registro_disciplinas.equipo:= op;
+  registro_disciplinas.activo:= true;
+  seek(archivo_disciplinas,filesize(archivo_disciplinas));
+  write(archivo_disciplinas,registro_disciplinas);
+  close(archivo_disciplinas);
+  textcolor(lightgreen);
+  writeln();
+  writeln('===================================================');
+  writeln('*** Disciplina cargada con exito y dada de alta ***');
+  writeln('===================================================');
+  delay(2000);
+  END
+ ELSE
+  BEGIN
+  REPEAT
+  reset(archivo_disciplinas);
+  clrscr;
+  writeln('INGRESE TODOS LOS DATOS DE LA DISCIPLINA');
+  writeln('----------------------------------------');
+  writeln();
+  write('>>> Ingrese codigo de disciplina: ');
+  readln(codigo_disciplina);
+  IF existe_disciplina(codigo_disciplina) = true THEN
+   BEGIN
+   textcolor(lightred);
+   writeln();
+   writeln('============================');
+   writeln('X Competencia ya existente X');
+   writeln('============================');
+   writeln();
+   END
+  ELSE
+   BEGIN
+   registro_disciplinas.cod_disciplina:= codigo_disciplina;
+   writeln();
+   write('>>> Ingrese la descripcion: ');
+   readln(registro_disciplinas.descripcion);
+   writeln();
+   REPEAT
+   write('>>> Disciplina en equipo[s/n]?: ');
+   readln(op);
+   IF (op <> 's') AND (op <> 'n') THEN
+    BEGIN
+    textcolor(lightred);
+    writeln();
+    writeln('=========================================');
+    writeln('X Valor incorrecto. Ingrese nuevamente X ');
+    writeln('=========================================');
+   END;
+   UNTIL (op = 's') OR (op = 'n');
+   registro_disciplinas.equipo:= op;
+   registro_disciplinas.activo:= true;
+   seek(archivo_disciplinas,filesize(archivo_disciplinas));
+   write(archivo_disciplinas,registro_disciplinas);
+   close(archivo_disciplinas);
+   textcolor(lightgreen);
+   writeln();
+   writeln('===================================================');
+   writeln('*** Disciplina cargada con exito y dada de alta ***');
+   writeln('===================================================');
+   writeln();
+   END;
+   REPEAT
+   textcolor(lightgreen);
+   writeln('Desea volver a cargar otra disciplina[s/n]:? ');
+   readln(opcion);
+   IF (opcion <> 's') AND (opcion <> 'n') THEN
+    BEGIN
+    textcolor(lightred);
+    writeln();
+    writeln('========================================');
+    writeln('X Valor incorrecto. Ingrese nuevamente X');
+    writeln('========================================');
+    writeln();
+    END;
+   UNTIL (opcion = 's') OR (opcion = 'n');
+  UNTIL (opcion = 'n');
+  END;
+ END;
+
 PROCEDURE menu_altas;
 VAR
    opcion: integer;
@@ -238,9 +372,11 @@ VAR
            clrscr;
            alta_atletas;
            END;
-        { 2:BEGIN
+         2:BEGIN
+           clrscr;
+           alta_disciplinas;
            END;
-         3:BEGIN
+        { 3:BEGIN
            END;
          4:BEGIN
            END;
