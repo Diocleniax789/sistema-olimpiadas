@@ -25,7 +25,7 @@ TYPE
                   END;
 
     sedes = RECORD
-          cod_internacional: integer;
+          cod_internacional: string;
           descripcion: string;
           activo: boolean;
           END;
@@ -108,6 +108,16 @@ FUNCTION verificar_estado_archivo_participantes(): boolean;
  close(archivo_participantes);
  END;
 
+FUNCTION verificar_estado_archivo_sedes(): boolean;
+ BEGIN
+ reset(archivo_sedes);
+ IF filesize(archivo_sedes) = 0 THEN
+  verificar_estado_archivo_sedes:= true
+ ELSE
+  verificar_estado_archivo_sedes:= false;
+ close(archivo_sedes);
+ END;
+
 FUNCTION existe_documento(documento: string): boolean;
 VAR
  f: boolean;
@@ -138,6 +148,22 @@ VAR
   existe_disciplina:= true
  ELSE
   existe_disciplina:= false;
+ END;
+
+FUNCTION existe_codigo_internacional(codigo_internacional: string): boolean;
+VAR
+ f: boolean;
+ BEGIN
+ f:= false;
+ REPEAT
+ read(archivo_sedes,registro_sedes);
+ IF codigo_internacional = registro_sedes.cod_internacional THEN
+  f:= true;
+ UNTIL eof(archivo_sedes) OR (f = true);
+ IF f = true THEN
+  existe_codigo_internacional:= true
+ ELSE
+  existe_codigo_internacional:= false;
  END;
 
 PROCEDURE ordena_atletas_por_DNI();
@@ -428,6 +454,88 @@ VAR
   END;
  END;
 
+PROCEDURE alta_sedes;
+VAR
+ opcion,codigo_internacional: string;
+ BEGIN
+ IF verificar_estado_archivo_sedes = true THEN
+  BEGIN
+  reset(archivo_sedes);
+  textcolor(white);
+  writeln('INGRESE LOS DATOS DE LA SEDE');
+  writeln('----------------------------');
+  writeln();
+  write('>>> Ingrese codigo internacional: ');
+  readln(registro_sedes.cod_internacional);
+  writeln();
+  write('>>> Ingrese descripcion: ');
+  readln(registro_sedes.descripcion);
+  registro_sedes.activo:= true;
+  seek(archivo_sedes,filesize(archivo_sedes));
+  write(archivo_sedes,registro_sedes);
+  close(archivo_sedes);
+  writeln();
+  textcolor(lightgreen);
+  writeln('=============================================');
+  writeln('*** Sede cargada con exito y dada de alta ***');
+  writeln('=============================================');
+  delay(2000);
+  END
+ ELSE
+  BEGIN
+  REPEAT
+  clrscr;
+  reset(archivo_sedes);
+  textcolor(white);
+  writeln('INGRESE LOS DATOS DE LA SEDE');
+  writeln('----------------------------');
+  writeln();
+  write('>>> Ingrese codigo internacional: ');
+  readln(codigo_internacional);
+  IF existe_codigo_internacional(codigo_internacional) = true THEN
+   BEGIN
+   textcolor(lightred);
+   writeln();
+   writeln('=====================================');
+   writeln('X Codigo internacional ya existente X');
+   writeln('=====================================');
+   END
+  ELSE
+   BEGIN
+   registro_sedes.cod_internacional:= codigo_internacional;
+   writeln();
+   write('>>> Ingrese descripcion: ');
+   readln(registro_sedes.descripcion);
+   registro_sedes.activo:= true;
+   seek(archivo_sedes,filesize(archivo_sedes));
+   write(archivo_sedes,registro_sedes);
+   close(archivo_sedes);
+   writeln();
+   textcolor(lightgreen);
+   writeln('=============================================');
+   writeln('*** Sede cargada con exito y dada de alta ***');
+   writeln('=============================================');
+   writeln();
+   END;
+   REPEAT
+   writeln();
+   textcolor(lightgreen);
+   writeln('Desea volver a cargar otra sede[s/n]?: ');
+   readln(opcion);
+   IF (opcion <> 's') AND (opcion <> 'n') THEN
+    BEGIN
+    textcolor(lightred);
+    writeln();
+    writeln('========================================');
+    writeln('X Valor incorrecto. Ingrese nuevamente X');
+    writeln('========================================');
+    writeln();
+    END;
+   UNTIL (opcion = 's') OR (opcion = 'n');
+  UNTIL (opcion = 'n');
+  END;
+ END;
+
 PROCEDURE menu_altas;
 VAR
    opcion: integer;
@@ -463,9 +571,11 @@ VAR
            clrscr;
            alta_participantes;
            END;
-      {   4:BEGIN
+         4:BEGIN
+           clrscr;
+           alta_sedes;
            END;
-         5:BEGIN
+       {  5:BEGIN
            END; }
     END;
    UNTIL (opcion = 6);
