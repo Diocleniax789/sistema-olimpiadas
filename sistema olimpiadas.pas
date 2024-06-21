@@ -379,8 +379,30 @@ VAR
   END;
  END;
 
+FUNCTION valida_anio_competencia(): integer;
+VAR
+ anio_comp: integer;
+ BEGIN
+ REPEAT
+ textcolor(white);
+ write('>>> Ingrese anio de competencia entre 1900 y 2017: ');
+ readln(anio_comp);
+ IF (anio_comp < 1900) OR (anio_comp > 2017) THEN
+  BEGIN
+  textcolor(lightred);
+  writeln();
+  writeln('======================================');
+  writeln('X Fuera de rango. Intente nuevamente X');
+  writeln('======================================');
+  writeln();
+  END;
+ UNTIL (anio_comp >= 1900) AND (anio_comp <= 2017);
+ valida_anio_competencia:= anio_comp;
+ END;
+
 PROCEDURE alta_participantes;
 VAR
+ anio:integer;
  opcion: string;
  BEGIN
  textcolor(white);
@@ -393,8 +415,8 @@ VAR
   write('>>> Ingrese codigo de disciplina: ');
   readln(registro_participantes.cod_disciplina);
   writeln();
-  write('>>> Ingrese anio de competencia: ');
-  readln(registro_participantes.anio_competencia);
+  anio:= valida_anio_competencia();
+  registro_participantes.anio_competencia:= anio;
   writeln();
   write('>>> Ingrese DNI del participante: ');
   readln(registro_participantes.dni);
@@ -564,7 +586,7 @@ VAR
 PROCEDURE alta_medallasXatletas;
 VAR
  opcion: string;
- medalla: integer;
+ medalla,anio: integer;
  BEGIN
  REPEAT
  clrscr;
@@ -575,8 +597,8 @@ VAR
  write('>>> Ingrese DNI del atleta: ');
  readln(registro_medallasXatletas.dni);
  writeln();
- write('>>> Ingrese anio de competencia: ');
- readln(registro_medallasXatletas.anio_competencia);
+ anio:= valida_anio_competencia();
+ registro_medallasXatletas.anio_competencia:= anio;
  writeln();
  write('>>> Ingrese codigo internacional: ');
  readln(registro_medallasXatletas.cod_internacional);
@@ -709,7 +731,7 @@ VAR
     writeln('9. Salir');
     writeln('---------------------------------------------------------------------------');
     writeln();
-    write('Seleccione una opcion <teclas del 1 al 9 inclusive>: ');
+    write('Seleccione una opcion <teclas del 1 al 9 inclusive> : ');
     readln(opcion);
     CASE opcion OF
          1: BEGIN
