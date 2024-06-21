@@ -714,11 +714,122 @@ VAR
  UNTIL (opcion = 4);
  END;
 
-PROCEDURE listado_atletas_por_anio;
+FUNCTION busca_sede(anio: integer): string;
+VAR
+ f: boolean;
  BEGIN
+ reset(archivo_sedes);
+ f:= false;
+ REPEAT
+ read(archivo_sedes,registro_sedes);
+ IF anio = registro_sedes.anio_competencia THEN
+  f:= true;
+ UNTIL eof(archivo_sedes) OR (f = true);
+ close(archivo_sedes);
+ IF f = true THEN
+  busca_sede:= registro_sedes.descripcion;
+ END;
 
+FUNCTION busca_atleta(documento: string): string;
+VAR
+ f: boolean;
+ inf,sup,medio: integer;
+ BEGIN
+ reset(archivo_atletas);
+ f:= false;
+ sup:= filesize(archivo_atletas) - 1;
+ inf:= 0;
+ REPEAT
+ medio:= (inf + sup) div 2;
+ seek(archivo_atletas,medio);
+ read(archivo_atletas,registro_atletas);
+ IF documento = registro_atletas.dni THEN
+  f:= true
+ ELSE
+  BEGIN
+  IF registro_atletas.dni > documento THEN
+    sup:= medio - 1
+  ELSE
+    inf:= medio + 1;
+  END;
+ UNTIL eof(archivo_atletas) OR (f = true);
+ IF f = true THEN
+   busca_atleta:= registro_atletas.nombre_apellido;
+ close(archivo_atletas);
+ END;
 
+PROCEDURE mostrar_atletas(anio: integer);
+VAR
+ documento,atleta: string;
+ BEGIN
+ WHILE NOT eof(archivo_participantes) DO
+  BEGIN
+  read(archivo_participantes,registro_participantes);
+  IF anio = registro_participantes.anio_competencia THEN
+   BEGIN
+   documento:= registro_participantes.dni;
+   atleta:= busca_atleta(documento);
+   IF documento =  registro_participantes.dni THEN
+    BEGIN
+    write(documento,' ',atleta);
+    writeln();
+    END;
+   END;
+  END;
+ END;
 
+PROCEDURE listado_atletas_por_anio;
+VAR
+ sede,opcion: string;
+ anio: integer;
+ BEGIN
+ IF verificar_estado_archivo_participantes = true THEN
+  BEGIN
+  textcolor(lightred);
+  writeln('=========================================================================');
+  writeln('X No hay registros cargados en el archivo participantes por el momento. X');
+  writeln('=========================================================================');
+  delay(2000);
+  END
+ ELSE
+  BEGIN
+  IF verificar_estado_archivo_sedes = true THEN
+   BEGIN
+   textcolor(lightred);
+   writeln('=================================================================');
+   writeln('X No hay registros cargados en el archivo sedes por el momento. X');
+   writeln('=================================================================');
+   delay(2000);
+   END
+  ELSE
+   BEGIN
+   REPEAT
+   clrscr;
+   reset(archivo_participantes);
+   writeln('PARA VER TODOS LOS ATLETAS DE UNA COMPETENCIA DETERMINADA INGRESE UN ANIO');
+   writeln('-------------------------------------------------------------------------');
+   writeln();
+   anio:= valida_anio_competencia();
+   sede:= busca_sede(anio);
+   writeln('Olimpiada ',anio,' de,',sede);
+   writeln();
+   mostrar_atletas(anio);
+   close(archivo_participantes);
+   writeln();
+   REPEAT
+   writeln('Desea volver otro listado[s/n]?: ');
+   readln(opcion);
+   IF (opcion <> 's') AND (opcion <> 'n') THEN
+    BEGIN
+    textcolor(lightred);
+    writeln('========================================');
+    writeln('X Valor incorrecto. Ingrese nuevamente X');
+    writeln('========================================');
+    END;
+   UNTIL (opcion = 's') OR (opcion = 'n');
+   UNTIL (opcion = 'n');
+   END;
+  END;
  END;
 
 PROCEDURE menu_principal;
@@ -727,6 +838,7 @@ VAR
    BEGIN
    REPEAT
     clrscr;
+    textcolor(white);
     writeln('--------------');
     writeln('MENU PRINCIPAL');
     writeln('--------------');
