@@ -25,6 +25,7 @@ TYPE
     sedes = RECORD
           cod_internacional: string;
           descripcion: string;
+          anio_competencia: integer;
           activo: boolean;
           END;
 
@@ -476,6 +477,7 @@ VAR
 
 PROCEDURE alta_sedes;
 VAR
+ anio: integer;
  opcion,codigo_internacional: string;
  BEGIN
  IF verificar_estado_archivo_sedes = true THEN
@@ -490,6 +492,9 @@ VAR
   writeln();
   write('>>> Ingrese descripcion: ');
   readln(registro_sedes.descripcion);
+  writeln();
+  anio:= valida_anio_competencia;
+  registro_sedes.anio_competencia:= anio;
   registro_sedes.activo:= true;
   seek(archivo_sedes,filesize(archivo_sedes));
   write(archivo_sedes,registro_sedes);
@@ -709,6 +714,13 @@ VAR
  UNTIL (opcion = 4);
  END;
 
+PROCEDURE listado_atletas_por_anio;
+ BEGIN
+
+
+
+ END;
+
 PROCEDURE menu_principal;
 VAR
   opcion: integer;
@@ -738,9 +750,11 @@ VAR
             clrscr;
             menu_abm;
             END;
-       {  2: BEGIN
+         2: BEGIN
+            clrscr;
+            listado_atletas_por_anio;
             END;
-         3: BEGIN
+       {  3: BEGIN
             END;
          4: BEGIN
             END;
