@@ -2,8 +2,6 @@ PROGRAM sistemas_olimpiadas;
 USES crt;
 
 TYPE
-    medallas = array [1..3]of string;
-
     atletas = RECORD
             dni: string;
             nombre_apellido: string;
@@ -33,8 +31,8 @@ TYPE
    medallasXatletas = RECORD
                     dni: string;
                     anio_competencia: integer;
-                    cod_internacional: integer;
-                    medalla: medallas;
+                    cod_internacional: string;
+                    medalla: array [1..3]of integer;
                     activo: boolean;
                     END;
 
@@ -536,6 +534,80 @@ VAR
   END;
  END;
 
+FUNCTION medalla_ganada(): integer;
+VAR
+ op: integer;
+ BEGIN
+ writeln('Que medalla ha ganado? ');
+ writeln('-----------------------');
+ writeln();
+ writeln('1. Oro');
+ writeln('2. Plata');
+ writeln('3. Bronce');
+ writeln();
+ writeln('-----------------------');
+ write('Seleccione medalla(teclas 1 al 3): ');
+ readln(op);
+ CASE op OF
+      1:BEGIN
+        medalla_ganada:= 1;
+        END;
+      2:BEGIN
+        medalla_ganada:= 2;
+        END;
+      3:BEGIN
+        medalla_ganada:= 3;
+        END;
+ END;
+ END;
+
+PROCEDURE alta_medallasXatletas;
+VAR
+ opcion: string;
+ medalla: integer;
+ BEGIN
+ REPEAT
+ clrscr;
+ reset(archivo_medallasXatletas);
+ writeln('INGRESE MEDALLAS X CADA ATLETA');
+ writeln('------------------------------');
+ writeln();
+ write('>>> Ingrese DNI del atleta: ');
+ readln(registro_medallasXatletas.dni);
+ writeln();
+ write('>>> Ingrese anio de competencia: ');
+ readln(registro_medallasXatletas.anio_competencia);
+ writeln();
+ write('>>> Ingrese codigo internacional: ');
+ readln(registro_medallasXatletas.cod_internacional);
+ writeln();
+ medalla:= medalla_ganada;
+ registro_medallasXatletas.medalla[medalla]:= 1;
+ registro_medallasXatletas.activo:= true;
+ seek(archivo_medallasXatletas,filesize(archivo_medallasXatletas));
+ write(archivo_medallasXatletas,registro_medallasXatletas);
+ close(archivo_medallasXatletas);
+ writeln();
+ writeln('================================================');
+ writeln('*** Atleta cargado con su respectiva medalla ***');
+ writeln('================================================');
+ writeln();
+ REPEAT
+  write('Desea volver a cargar otro atleta con su medalla[s/n]?: ');
+  readln(opcion);
+  IF (opcion <> 's') AND (opcion <> 'n') THEN
+   BEGIN
+   textcolor(lightred);
+   writeln();
+   writeln('========================================');
+   writeln('X Valor incorrecto. Ingrese nuevamente X');
+   writeln('========================================');
+   writeln();
+   END;
+ UNTIL (opcion = 's') OR (opcion = 'n');
+ UNTIL (opcion = 'n');
+ END;
+
 PROCEDURE menu_altas;
 VAR
    opcion: integer;
@@ -575,8 +647,10 @@ VAR
            clrscr;
            alta_sedes;
            END;
-       {  5:BEGIN
-           END; }
+         5:BEGIN
+           clrscr;
+           alta_medallasXatletas
+           END;
     END;
    UNTIL (opcion = 6);
    END;
