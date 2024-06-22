@@ -5,6 +5,7 @@ TYPE
     atletas = RECORD
             dni: string;
             nombre_apellido: string;
+            pais_atleta: string;
             activo: boolean;
             END;
 
@@ -37,6 +38,12 @@ TYPE
                     activo: boolean;
                     END;
 
+   medallero = RECORD
+             sede: string;
+             anio_competencia: integer;
+             acum_medallas: array[1..3]of integer;
+             END;
+
 VAR
 archivo_atletas: FILE OF atletas;
 registro_atletas: atletas;
@@ -48,6 +55,8 @@ archivo_sedes: FILE OF sedes;
 registro_sedes: sedes;
 archivo_medallasXatletas: FILE OF medallasXatletas;
 registro_medallasXatletas: medallasXatletas;
+archivo_medallero: FILE OF medallero;
+registro_medallero: medallero;
 
 PROCEDURE crear_archivo_atletas;
  BEGIN
@@ -77,6 +86,12 @@ PROCEDURE crear_archivo_medallasXatletas;
  BEGIN
  rewrite(archivo_medallasXatletas);
  close(archivo_medallasXatletas);
+ END;
+
+PROCEDURE crear_archivo_medallero;
+ BEGIN
+ rewrite(archivo_medallero);
+ close(archivo_medallero);
  END;
 
 FUNCTION verifica_estado_archivo_atletas(): boolean;
@@ -206,6 +221,9 @@ VAR
    writeln();
    write('>>> Ingrese nombre y apellido: ');
    readln(registro_atletas.nombre_apellido);
+   writeln();
+   write('>>> Ingrese pais de origen: ');
+   readln(registro_atletas.pais_atleta);
    registro_atletas.activo:= true;
    seek(archivo_atletas,filesize(archivo_atletas));
    write(archivo_atletas,registro_atletas);
@@ -241,6 +259,9 @@ VAR
     writeln();
     write('>>> Ingrese nombre y apellido: ');
     readln(registro_atletas.nombre_apellido);
+    writeln();
+    write('>>> Ingrese pais de origen: ');
+    readln(registro_atletas.pais_atleta);
     registro_atletas.activo:= true;
     seek(archivo_atletas,filesize(archivo_atletas));
     write(archivo_atletas,registro_atletas);
@@ -811,6 +832,7 @@ VAR
    writeln();
    anio:= valida_anio_competencia();
    sede:= busca_sede(anio);
+   writeln();
    writeln('Olimpiada ',anio,' de,',sede);
    writeln();
    mostrar_atletas(anio);
@@ -889,10 +911,12 @@ assign(archivo_disciplinas,'C:\Users\JULIO\Desktop\sistema-olimpiadas\disciplina
 assign(archivo_participantes,'C:\Users\JULIO\Desktop\sistema-olimpiadas\participantes.dat');
 assign(archivo_sedes,'C:\Users\JULIO\Desktop\sistema-olimpiadas\sedes.dat');
 assign(archivo_medallasXatletas,'C:\Users\JULIO\Desktop\sistema-olimpiadas\medallasXatletas.dat');
+assign(archivo_medallero,'C:\Users\JULIO\Desktop\sistema-olimpiadas\medallero.dat');
 crear_archivo_atletas;
 crear_archivo_disciplinas;
 crear_archivo_participantes;
 crear_archivo_sedes;
 crear_archivo_medallasXatletas;
+crear_archivo_medallero;
 menu_principal;
 END.
