@@ -38,11 +38,6 @@ TYPE
                     activo: boolean;
                     END;
 
-   medallero = RECORD
-             sede: string;
-             anio_competencia: integer;
-             acum_medallas: array[1..3]of integer;
-             END;
 
 VAR
 archivo_atletas: FILE OF atletas;
@@ -55,8 +50,6 @@ archivo_sedes: FILE OF sedes;
 registro_sedes: sedes;
 archivo_medallasXatletas: FILE OF medallasXatletas;
 registro_medallasXatletas: medallasXatletas;
-archivo_medallero: FILE OF medallero;
-registro_medallero: medallero;
 
 PROCEDURE crear_archivo_atletas;
  BEGIN
@@ -86,12 +79,6 @@ PROCEDURE crear_archivo_medallasXatletas;
  BEGIN
  rewrite(archivo_medallasXatletas);
  close(archivo_medallasXatletas);
- END;
-
-PROCEDURE crear_archivo_medallero;
- BEGIN
- rewrite(archivo_medallero);
- close(archivo_medallero);
  END;
 
 FUNCTION verifica_estado_archivo_atletas(): boolean;
@@ -854,6 +841,78 @@ VAR
   END;
  END;
 
+FUNCTION busca_codigo_internacional(anio: integer): string;
+VAR
+ f: boolean;
+ BEGIN
+ reset(archivo_sedes);
+ f:= false;
+ REPEAT
+ read(archivo_sedes,registro_sedes);
+ IF anio = registro_sedes.anio_competencia THEN
+  f:= true;
+ UNTIL eof(archivo_sedes) OR (f = true);
+ close(archivo_sedes);
+ IF f = true THEN
+  busca_codigo_internacional:= registro_sedes.cod_internacional;
+ END;
+
+PROCEDURE muestra_lista_medallas(cod_int: string);
+VAR
+ f: integer;
+ BEGIN
+ reset(archivo_medallasXatletas);
+ writeln('DNI    |  ORO - PLATA - BRONCE ');
+ WHILE NOT eof(archivo_medallasXatletas) DO
+  BEGIN
+  read(archivo_medallasXatletas,registro_medallasXatletas);
+  IF cod_int = registro_medallasXatletas.cod_internacional THEN
+   BEGIN
+   writeln();
+   writeln(registro_medallasXatletas.dni);
+   FOR f:= 1 TO 3 DO
+    BEGIN
+    write(registro_medallasXatletas.medalla[f]);
+    END;
+   writeln('---------------------------------------------------------------');
+   END;
+  END;
+ close(archivo_medallasXatletas);
+ END;
+
+PROCEDURE muestra_listado_medallas;
+VAR
+ cod_int,opcion: string;
+ anio: integer;
+ BEGIN
+ REPEAT
+ clrscr;
+ writeln('INGRESE UN ANIO PARA PODER VER LISTADO DE MEDALLAS');
+ writeln('--------------------------------------------------');
+ writeln();
+ anio:= valida_anio_competencia;
+ cod_int:= busca_codigo_internacional(anio);
+ writeln('SEDE: ',cod_int,' ',' ANIO: ',anio);
+ writeln('-------------------------------');
+ writeln();
+ muestra_lista_medallas(cod_int);
+ writeln();
+ REPEAT
+ textcolor(lightgreen);
+ write('Desea volver a ver otro listado[s/n]?: ');
+ readln(opcion);
+ IF (opcion <> 's') AND (opcion <> 'n') THEN
+  BEGIN
+  writeln();
+  textcolor(lightred);
+  writeln('========================================');
+  writeln('X Valor incorrecto. Ingrese nuevamente X');
+  writeln('========================================');
+  END;
+ UNTIL (opcion = 's') OR (opcion = 'n');
+ UNTIL (opcion = 'n');
+ END;
+
 PROCEDURE menu_principal;
 VAR
   opcion: integer;
@@ -888,9 +947,11 @@ VAR
             clrscr;
             listado_atletas_por_anio;
             END;
-       {  3: BEGIN
+         3: BEGIN
+            clrscr;
+            muestra_listado_medallas;
             END;
-         4: BEGIN
+       {  4: BEGIN
             END;
          5: BEGIN
             END;
@@ -911,12 +972,10 @@ assign(archivo_disciplinas,'C:\Users\JULIO\Desktop\sistema-olimpiadas\disciplina
 assign(archivo_participantes,'C:\Users\JULIO\Desktop\sistema-olimpiadas\participantes.dat');
 assign(archivo_sedes,'C:\Users\JULIO\Desktop\sistema-olimpiadas\sedes.dat');
 assign(archivo_medallasXatletas,'C:\Users\JULIO\Desktop\sistema-olimpiadas\medallasXatletas.dat');
-assign(archivo_medallero,'C:\Users\JULIO\Desktop\sistema-olimpiadas\medallero.dat');
 crear_archivo_atletas;
 crear_archivo_disciplinas;
 crear_archivo_participantes;
 crear_archivo_sedes;
 crear_archivo_medallasXatletas;
-crear_archivo_medallero;
 menu_principal;
 END.
