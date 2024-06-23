@@ -51,6 +51,16 @@ registro_sedes: sedes;
 archivo_medallasXatletas: FILE OF medallasXatletas;
 registro_medallasXatletas: medallasXatletas;
 
+PROCEDURE incializar_arreglo_medallas;
+VAR
+ f: integer;
+ BEGIN
+ FOR f:= 1 TO 3 DO
+  BEGIN
+  registro_medallasXatletas.medalla[f]:= 0;
+  END;
+ END;
+
 PROCEDURE crear_archivo_atletas;
  BEGIN
  rewrite(archivo_atletas);
@@ -573,6 +583,7 @@ FUNCTION medalla_ganada(): integer;
 VAR
  op: integer;
  BEGIN
+ incializar_arreglo_medallas;
  writeln('Que medalla ha ganado? ');
  writeln('-----------------------');
  writeln();
@@ -874,7 +885,6 @@ VAR
     BEGIN
     write(registro_medallasXatletas.medalla[f]);
     END;
-   writeln('---------------------------------------------------------------');
    END;
   END;
  close(archivo_medallasXatletas);
@@ -892,7 +902,7 @@ VAR
  writeln();
  anio:= valida_anio_competencia;
  cod_int:= busca_codigo_internacional(anio);
- writeln('SEDE: ',cod_int,' ',' ANIO: ',anio);
+ writeln('SEDE: ',cod_int,' ANIO: ',anio);
  writeln('-------------------------------');
  writeln();
  muestra_lista_medallas(cod_int);
