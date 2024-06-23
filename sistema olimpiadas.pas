@@ -14,6 +14,7 @@ TYPE
                 descripcion: string;
                 equipo: string;
                 activo: boolean;
+                anio_competencia: integer;
                 END;
 
     participantes = RECORD
@@ -177,6 +178,27 @@ VAR
   existe_codigo_internacional:= false;
  END;
 
+FUNCTION valida_anio_competencia(): integer;
+VAR
+ anio_comp: integer;
+ BEGIN
+ REPEAT
+ textcolor(white);
+ write('>>> Ingrese anio de competencia entre 1900 y 2017: ');
+ readln(anio_comp);
+ IF (anio_comp < 1900) OR (anio_comp > 2017) THEN
+  BEGIN
+  textcolor(lightred);
+  writeln();
+  writeln('======================================');
+  writeln('X Fuera de rango. Intente nuevamente X');
+  writeln('======================================');
+  writeln();
+  END;
+ UNTIL (anio_comp >= 1900) AND (anio_comp <= 2017);
+ valida_anio_competencia:= anio_comp;
+ END;
+
 PROCEDURE ordena_atletas_por_DNI();
 VAR
  i,j: integer;
@@ -292,6 +314,7 @@ END;
 
 PROCEDURE alta_disciplinas;
 VAR
+ anio: integer;
  op,codigo_disciplina,opcion: string;
  BEGIN
  IF verificar_estado_archivo_disciplinas() = true THEN
@@ -319,6 +342,9 @@ VAR
    END;
   UNTIL (op = 's') OR (op = 'n');
   registro_disciplinas.equipo:= op;
+  writeln();
+  anio:= valida_anio_competencia;
+  registro_disciplinas.anio_competencia:= anio;
   registro_disciplinas.activo:= true;
   seek(archivo_disciplinas,filesize(archivo_disciplinas));
   write(archivo_disciplinas,registro_disciplinas);
@@ -369,6 +395,9 @@ VAR
    END;
    UNTIL (op = 's') OR (op = 'n');
    registro_disciplinas.equipo:= op;
+   writeln();
+   anio:= valida_anio_competencia;
+   registro_disciplinas.anio_competencia:= anio;
    registro_disciplinas.activo:= true;
    seek(archivo_disciplinas,filesize(archivo_disciplinas));
    write(archivo_disciplinas,registro_disciplinas);
@@ -396,27 +425,6 @@ VAR
    UNTIL (opcion = 's') OR (opcion = 'n');
   UNTIL (opcion = 'n');
   END;
- END;
-
-FUNCTION valida_anio_competencia(): integer;
-VAR
- anio_comp: integer;
- BEGIN
- REPEAT
- textcolor(white);
- write('>>> Ingrese anio de competencia entre 1900 y 2017: ');
- readln(anio_comp);
- IF (anio_comp < 1900) OR (anio_comp > 2017) THEN
-  BEGIN
-  textcolor(lightred);
-  writeln();
-  writeln('======================================');
-  writeln('X Fuera de rango. Intente nuevamente X');
-  writeln('======================================');
-  writeln();
-  END;
- UNTIL (anio_comp >= 1900) AND (anio_comp <= 2017);
- valida_anio_competencia:= anio_comp;
  END;
 
 PROCEDURE alta_participantes;
@@ -923,6 +931,53 @@ VAR
  UNTIL (opcion = 'n');
  END;
 
+PROCEDURE muestra_disciplinas(anio: integer);
+ BEGIN
+ reset(archivo_disciplinas);
+ WHILE NOT eof(archivo_disciplinas) DO
+  BEGIN
+  read(archivo_disciplinas,registro_disciplinas);
+  IF anio = registro_disciplinas.anio_competencia THEN
+  BEGIN
+  writeln();
+  write(registro_disciplinas.cod_disciplina,' ',registro_disciplinas.descripcion,' ',registro_disciplinas.equipo);
+  END;
+  END;
+ close(archivo_disciplinas);
+ END;
+
+PROCEDURE muestra_listado_disciplinas;
+VAR
+ opcion,cod_int: string;
+ anio: integer;
+ BEGIN
+ REPEAT
+ textcolor(white);
+ writeln('INGRESE UN ANIO DETERMINADO PARA PODER VER TODAS SUS DISCILPLINAS');
+ writeln('-----------------------------------------------------------------');
+ writeln();
+ anio:= valida_anio_competencia;
+ cod_int:= busca_codigo_internacional(anio);
+ writeln('SEDE: ',cod_int,' ','ANIO: ',anio);
+ muestra_disciplinas(anio);
+ REPEAT
+ textcolor(lightgreen);
+ writeln();
+ write('Desea volver a ver otro listado[s/n]?: ');
+ readln(opcion);
+ IF (opcion <> 's') AND (opcion <> 'n') THEN
+  BEGIN
+  textcolor(lightred);
+  writeln();
+  writeln('========================================');
+  writeln('X Valor incorrecto. Ingrese nuevamente X');
+  writeln('========================================');
+  writeln();
+  END;
+ UNTIL (opcion = 's') OR (opcion = 'n');
+ UNTIL (opcion = 'n');
+ END;
+
 PROCEDURE menu_principal;
 VAR
   opcion: integer;
@@ -938,7 +993,7 @@ VAR
     writeln('1. ABM');
     writeln('2. Listado de atletas olimpicos en un año determinado');
     writeln('3. Listado de metallas ganadas de cada tipo para un anio determinado');
-    writeln('4. Listado de disiciplinas de cierto aino');
+    writeln('4. Listado de disiciplinas de cierto anio');
     writeln('5. Mostrar trayectoria individual y grupal de cierto atleta');
     writeln('6. Mostrar participantes mediante disciplina y anio de competencia');
     writeln('7. Pais sede donde se compitio con mayor cantidad de medallas ganadas');
@@ -961,9 +1016,11 @@ VAR
             clrscr;
             muestra_listado_medallas;
             END;
-       {  4: BEGIN
+         4: BEGIN
+            clrscr;
+            muestra_listado_disciplinas;
             END;
-         5: BEGIN
+       {  5: BEGIN
             END;
          6: BEGIN
             END;
