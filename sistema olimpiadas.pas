@@ -181,6 +181,16 @@ VAR
   existe_codigo_internacional:= false;
  END;
 
+FUNCTION verifica_estado_archivo_medallasXatletas(): boolean;
+  BEGIN
+  reset(archivo_medallasXatletas);
+  IF filesize(archivo_medallasXatletas) = 0 THEN
+   verifica_estado_archivo_medallasXatletas:= true
+  ELSE
+   verifica_estado_archivo_medallasXatletas:= false;
+  close(archivo_medallasXatletas);
+  END;
+
 FUNCTION valida_anio_competencia(): integer;
 VAR
  anio_comp: integer;
@@ -933,32 +943,43 @@ VAR
  cod_int,opcion: string;
  anio: integer;
  BEGIN
- REPEAT
- clrscr;
- writeln('INGRESE UN ANIO PARA PODER VER LISTADO DE MEDALLAS');
- writeln('--------------------------------------------------');
- writeln();
- anio:= valida_anio_competencia;
- cod_int:= busca_codigo_internacional(anio);
- writeln('SEDE: ',cod_int,' ANIO: ',anio);
- writeln('-------------------------------');
- writeln();
- muestra_lista_medallas(cod_int);
- writeln();
- REPEAT
- textcolor(lightgreen);
- write('Desea volver a ver otro listado[s/n]?: ');
- readln(opcion);
- IF (opcion <> 's') AND (opcion <> 'n') THEN
+ IF verifica_estado_archivo_medallasXatletas = true THEN
   BEGIN
-  writeln();
   textcolor(lightred);
-  writeln('========================================');
-  writeln('X Valor incorrecto. Ingrese nuevamente X');
-  writeln('========================================');
-  END;
- UNTIL (opcion = 's') OR (opcion = 'n');
+  writeln('============================================================');
+  writeln('X El archivo de medallas se encuentra vacio. Intente Luego X');
+  writeln('============================================================');
+  delay(2000);
+  END
+ ELSE
+  BEGIN
+  REPEAT
+  clrscr;
+  writeln('INGRESE UN ANIO PARA PODER VER LISTADO DE MEDALLAS');
+  writeln('--------------------------------------------------');
+  writeln();
+  anio:= valida_anio_competencia;
+  cod_int:= busca_codigo_internacional(anio);
+  writeln('SEDE: ',cod_int,' ANIO: ',anio);
+  writeln('-------------------------------');
+  writeln();
+  muestra_lista_medallas(cod_int);
+  writeln();
+   REPEAT
+   textcolor(lightgreen);
+   write('Desea volver a ver otro listado[s/n]?: ');
+   readln(opcion);
+   IF (opcion <> 's') AND (opcion <> 'n') THEN
+    BEGIN
+    writeln();
+    textcolor(lightred);
+    writeln('========================================');
+    writeln('X Valor incorrecto. Ingrese nuevamente X');
+    writeln('========================================');
+    END;
+   UNTIL (opcion = 's') OR (opcion = 'n');
  UNTIL (opcion = 'n');
+  END;
  END;
 
 PROCEDURE muestra_disciplinas(anio: integer);
@@ -981,31 +1002,42 @@ VAR
  opcion,cod_int: string;
  anio: integer;
  BEGIN
- REPEAT
- textcolor(white);
- writeln('INGRESE UN ANIO DETERMINADO PARA PODER VER TODAS SUS DISCILPLINAS');
- writeln('-----------------------------------------------------------------');
- writeln();
- anio:= valida_anio_competencia;
- cod_int:= busca_codigo_internacional(anio);
- writeln('SEDE: ',cod_int,' ','ANIO: ',anio);
- muestra_disciplinas(anio);
- REPEAT
- textcolor(lightgreen);
- writeln();
- write('Desea volver a ver otro listado[s/n]?: ');
- readln(opcion);
- IF (opcion <> 's') AND (opcion <> 'n') THEN
+ IF verificar_estado_archivo_disciplinas = true THEN
   BEGIN
   textcolor(lightred);
+  writeln('===============================================================');
+  writeln('X El archivo de disciplinas se encuentra vacio. Intente luego X');
+  writeln('===============================================================');
+  delay(2000);
+  END
+ ELSE
+  BEGIN
+  REPEAT
+  textcolor(white);
+  writeln('INGRESE UN ANIO DETERMINADO PARA PODER VER TODAS SUS DISCILPLINAS');
+  writeln('-----------------------------------------------------------------');
   writeln();
-  writeln('========================================');
-  writeln('X Valor incorrecto. Ingrese nuevamente X');
-  writeln('========================================');
+  anio:= valida_anio_competencia;
+  cod_int:= busca_codigo_internacional(anio);
+  writeln('SEDE: ',cod_int,' ','ANIO: ',anio);
+  muestra_disciplinas(anio);
+  REPEAT
+  textcolor(lightgreen);
   writeln();
+  write('Desea volver a ver otro listado[s/n]?: ');
+  readln(opcion);
+  IF (opcion <> 's') AND (opcion <> 'n') THEN
+   BEGIN
+   textcolor(lightred);
+   writeln();
+   writeln('========================================');
+   writeln('X Valor incorrecto. Ingrese nuevamente X');
+   writeln('========================================');
+   writeln();
+   END;
+  UNTIL (opcion = 's') OR (opcion = 'n');
+  UNTIL (opcion = 'n');
   END;
- UNTIL (opcion = 's') OR (opcion = 'n');
- UNTIL (opcion = 'n');
  END;
 
 FUNCTION existe_atleta(documento: string): boolean;
@@ -1119,7 +1151,7 @@ VAR
   writeln('--------------------');
   FOR f:= 1 TO 3 DO
    BEGIN
-   write(tot_medal[1],'|',tot_medal[2],'|',tot_medal[3]);
+   write(tot_medal[f]);
    END;
  close(archivo_participantes);
  END;
@@ -1186,23 +1218,34 @@ VAR
    BEGIN
    REPEAT
     clrscr;
-    textcolor(white);
+    textcolor(lightgreen);
     writeln('--------------');
     writeln('MENU PRINCIPAL');
     writeln('--------------');
     writeln();
+    textcolor(yellow);
     writeln('---------------------------------------------------------------------------');
     writeln('1. ABM');
-    writeln('2. Listado de atletas olimpicos en un año determinado');
+    writeln('---------------------------------------------------------------------------');
+    writeln('2. Listado de atletas olimpicos en un anio determinado');
+    writeln('---------------------------------------------------------------------------');
     writeln('3. Listado de metallas ganadas de cada tipo para un anio determinado');
+    writeln('---------------------------------------------------------------------------');
     writeln('4. Listado de disiciplinas de cierto anio');
+    writeln('---------------------------------------------------------------------------');
     writeln('5. Mostrar trayectoria individual y grupal de cierto atleta');
+    writeln('---------------------------------------------------------------------------');
     writeln('6. Mostrar participantes mediante disciplina y anio de competencia');
+    writeln('---------------------------------------------------------------------------');
     writeln('7. Pais sede donde se compitio con mayor cantidad de medallas ganadas');
+    writeln('---------------------------------------------------------------------------');
     writeln('8. Ranking del top 10 de deportistas con mayor cantidad de medallas ganadas');
+    writeln('---------------------------------------------------------------------------');
     writeln('9. Salir');
     writeln('---------------------------------------------------------------------------');
     writeln();
+    textcolor(lightcyan);
+    writeln('========================================================');
     write('Seleccione una opcion <teclas del 1 al 9 inclusive> : ');
     readln(opcion);
     CASE opcion OF
