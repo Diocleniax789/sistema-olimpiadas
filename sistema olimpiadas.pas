@@ -505,7 +505,8 @@ VAR
   BEGIN
   REPEAT
   reset(archivo_participantes);
- textcolor(white);
+  clrscr;
+  textcolor(white);
   writeln('INGRESE LOS DATOS DE LOS PARTICIPANTES');
   writeln('--------------------------------------');
   writeln();
@@ -1232,6 +1233,73 @@ VAR
   END;
  END;
 
+PROCEDURE filtra_disciplina_anio(anio: integer; disciplina: string);
+VAR
+ documento,almacena_nombre_apellido,cod_dis,almacena_descrip_disciplina: string;
+ BEGIN
+ reset(archivo_participantes);
+ writeln('DISCIPLINA: ',disciplina);
+ WHILE NOT eof(archivo_participantes) DO
+  BEGIN
+  read(archivo_participantes,registro_participantes);
+  IF anio = registro_participantes.anio_competencia THEN
+   IF disciplina = registro_participantes.cod_disciplina THEN
+    BEGIN
+     writeln();
+     cod_dis:= registro_participantes.cod_disciplina;
+     almacena_descrip_disciplina:= busca_descripcion_disciplina(cod_dis);
+     documento:= registro_participantes.dni;
+     almacena_nombre_apellido:= busca_atleta(documento);
+     writeln('==============================================');
+     writeln('Nombre: ',almacena_nombre_apellido);
+     writeln('Descripcion: ',almacena_descrip_disciplina);
+     writeln('==============================================');
+    END;
+  END;
+  close(archivo_participantes);
+ END;
+
+PROCEDURE muestra_disciplina_participantes;
+VAR
+ disciplina,opcion: string;
+ anio: integer;
+ BEGIN
+ IF verificar_estado_archivo_participantes = true THEN
+  BEGIN
+  textcolor(lightred);
+  writeln('=========================================================');
+  writeln('X El archivo de participantes esta vacio. Intente luego X');
+  writeln('=========================================================');
+  delay(2000);
+  END
+ ELSE
+  BEGIN
+  REPEAT
+  writeln('INGRESE UN ANIO DE COMPETENCIA Y UNA DISCIPLINA PARA VER TODOS LOS PARTICIPANTES DE LA MISMA');
+  writeln('--------------------------------------------------------------------------------------------');
+  anio:= valida_anio_competencia;
+  writeln();
+  write('>>> Ingrese un codigo de disciplina: ');
+  readln(disciplina);
+  filtra_disciplina_anio(anio,disciplina);
+  writeln();
+  REPEAT
+  writeln('Desea volver a ver otro listado[s/n]?: ');
+  readln(opcion);
+  IF (opcion <> 's') AND (opcion <> 'n') THEN
+   BEGIN
+   textcolor(lightred);
+   writeln();
+   writeln('========================================');
+   writeln('X Valor incorrecto. Ingrese nuevamente X');
+   writeln('========================================');
+   writeln();
+   END;
+  UNTIL (opcion = 's') OR (opcion = 'n');
+  UNTIL (opcion = 'n');
+  END;
+ END;
+
 PROCEDURE menu_principal;
 VAR
   opcion: integer;
@@ -1289,9 +1357,11 @@ VAR
             clrscr;
             muestra_trayectoria_atleta;
             END;
-       {  6: BEGIN
+         6: BEGIN
+            clrscr;
+            muestra_disciplina_participantes;
             END;
-         7: BEGIN
+       {  7: BEGIN
             END;
          8: BEGIN
             END; }
