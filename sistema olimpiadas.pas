@@ -271,6 +271,7 @@ VAR
   reset(archivo_atletas);
   IF verifica_estado_archivo_atletas() = true THEN
    BEGIN
+   textcolor(lightcyan);
    writeln('INGRESE TODOS LOS DATOS DEL ATLETA');
    writeln('----------------------------------');
    writeln();
@@ -298,6 +299,7 @@ VAR
    REPEAT
    reset(archivo_atletas);
    clrscr;
+   textcolor(lightcyan);
    writeln('INGRESE TODOS LOS DATOS DEL ATLETA');
    writeln('----------------------------------');
    writeln();
@@ -359,6 +361,7 @@ VAR
  IF verificar_estado_archivo_disciplinas() = true THEN
   BEGIN
   reset(archivo_disciplinas);
+  textcolor(cyan);
   writeln('INGRESE TODOS LOS DATOS DE LA DISCIPLINA');
   writeln('----------------------------------------');
   writeln();
@@ -400,6 +403,7 @@ VAR
   REPEAT
   reset(archivo_disciplinas);
   clrscr;
+  textcolor(cyan);
   writeln('INGRESE TODOS LOS DATOS DE LA DISCIPLINA');
   writeln('----------------------------------------');
   writeln();
@@ -635,8 +639,11 @@ VAR
  writeln('Que medalla ha ganado? ');
  writeln('-----------------------');
  writeln();
+ textcolor(yellow);
  writeln('1. Oro');
+ textcolor(brown);
  writeln('2. Plata');
+ textcolor(white);
  writeln('3. Bronce');
  writeln();
  writeln('-----------------------');
@@ -682,6 +689,7 @@ VAR
  write(archivo_medallasXatletas,registro_medallasXatletas);
  close(archivo_medallasXatletas);
  writeln();
+ textcolor(lightgreen);
  writeln('================================================');
  writeln('*** Atleta cargado con su respectiva medalla ***');
  writeln('================================================');
@@ -716,10 +724,15 @@ VAR
     textcolor(magenta);
     writeln('------------------------------');
     writeln('1. Alta de atletas');
+    writeln('------------------------------');
     writeln('2. Alta de disciplinas');
+    writeln('------------------------------');
     writeln('3. Alta de participantes');
+    writeln('------------------------------');
     writeln('4. Alta de sedes');
+    writeln('------------------------------');
     writeln('5. Alta de medallas X atletas');
+    writeln('------------------------------');
     writeln('6. Volver al menu de ABM');
     writeln('-----------------------------');
     writeln();
@@ -1135,7 +1148,7 @@ VAR
 
 PROCEDURE ubica_dni_en_participantes(documento: string);
 VAR
- anio_comp,f: integer;
+ anio_comp: integer;
  sede,almacena_desc_dis,cod_dis: string;
  BEGIN
  reset(archivo_participantes);
@@ -1159,10 +1172,7 @@ VAR
   contador_medallas(documento,anio_comp);
   writeln('ORO | PLATA | BRONCE');
   writeln('--------------------');
-  FOR f:= 1 TO 3 DO
-   BEGIN
-   write(tot_medal[f]);
-   END;
+  write(tot_medal[1],' ',tot_medal[2],' ',tot_medal[3]);
  close(archivo_participantes);
  END;
 
@@ -1204,8 +1214,8 @@ VAR
    writeln('========================');
    writeln();
    END;
-  REPEAT
   writeln();
+  REPEAT
   writeln('Desea volver a ver otra trayectoria de otro atleta[s/n]?: ');
   readln(opcion);
   IF (opcion <> 's') AND (opcion <> 'n') THEN
