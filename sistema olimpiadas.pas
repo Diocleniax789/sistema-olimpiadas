@@ -713,6 +713,7 @@ VAR
     writeln('MENU ALTAS');
     writeln('----------');
     writeln();
+    textcolor(magenta);
     writeln('------------------------------');
     writeln('1. Alta de atletas');
     writeln('2. Alta de disciplinas');
@@ -722,6 +723,8 @@ VAR
     writeln('6. Volver al menu de ABM');
     writeln('-----------------------------');
     writeln();
+    textcolor(cyan);
+    writeln('==========================');
     write('Seleccione opcion: ');
     readln(opcion);
     CASE opcion OF
