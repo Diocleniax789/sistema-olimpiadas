@@ -978,6 +978,67 @@ VAR
  UNTIL (opcion = 'n');
  END;
 
+FUNCTION existe_atleta(documento: string): boolean;
+VAR
+ f: boolean;
+ inf,sup,medio: integer;
+ BEGIN
+ reset(archivo_atletas);
+ f:= false;
+ sup:= filesize(archivo_atletas) - 1;
+ inf:= 0;
+ REPEAT
+ medio:= (inf + sup) div 2;
+ seek(archivo_atletas,medio);
+ read(archivo_atletas,registro_atletas);
+ IF documento = registro_atletas.dni THEN
+  f:= true
+ ELSE
+  BEGIN
+  IF registro_atletas.dni > documento THEN
+    sup:= medio - 1
+  ELSE
+    inf:= medio + 1;
+  END;
+ UNTIL eof(archivo_atletas) OR (f = true);
+ IF f = true THEN
+   existe_atleta:= true
+ ELSE
+   existe_atleta:= false;
+ close(archivo_atletas);
+ END;
+
+
+PROCEDURE muestra_trayectoria_atleta;
+VAR
+ documento: string;
+ BEGIN
+ reset(archivo_atletas);
+ IF verifica_estado_archivo_atletas = true THEN
+  BEGIN
+  textcolor(lightred);
+  writeln('==========================================================');
+  writeln('X El archivo atletas no contiene registro. Intente luego X');
+  writeln('==========================================================');
+  close(archivo_atletas);
+  delay(2000);
+  END
+ ELSE
+  BEGIN
+  REPEAT
+  writeln('INGRESE UN ATLETA MEDIANTE SU DNI PARA VER SU TRAYECTORIA');
+  writeln('---------------------------------------------------------');
+  readln(documento);
+  IF existe_atleta(documento) = true THEN
+   BEGIN
+
+   END
+  ELSE
+
+  UNTIL
+  END;
+ END;
+
 PROCEDURE menu_principal;
 VAR
   opcion: integer;
@@ -1020,9 +1081,11 @@ VAR
             clrscr;
             muestra_listado_disciplinas;
             END;
-       {  5: BEGIN
+         5: BEGIN
+            clrscr;
+            muestra_trayectoria_atleta;
             END;
-         6: BEGIN
+       {  6: BEGIN
             END;
          7: BEGIN
             END;
