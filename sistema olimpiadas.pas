@@ -225,6 +225,32 @@ VAR
   close(archivo_atletas);
  END;
 
+PROCEDURE ordena_particpantes_por_anio();
+VAR
+ i,j: integer;
+ registro_disciplinas_auxiliar: disciplinas;
+ BEGIN
+ reset(archivo_disciplinas);
+ FOR i:= 0 TO filesize(archivo_disciplinas) - 2 DO
+  BEGIN
+  FOR j:= i + 1 TO filesize(archivo_disciplinas) - 1 DO
+   BEGIN
+   seek(archivo_disciplinas,i);
+   read(archivo_disciplinas,registro_disciplinas);
+   seek(archivo_disciplinas,j);
+   read(archivo_disciplinas,registro_disciplinas_auxiliar);
+   IF registro_disciplinas.anio_competencia > registro_disciplinas_auxiliar.anio_competencia THEN
+    BEGIN
+    seek(archivo_disciplinas,i);
+    write(archivo_disciplinas,registro_disciplinas_auxiliar);
+    seek(archivo_disciplinas,j);
+    write(archivo_disciplinas,registro_disciplinas);
+    END;
+   END;
+  END;
+  close(archivo_disciplinas);
+ END;
+
 PROCEDURE alta_atletas;
 VAR
  documento,opcion: string;
@@ -498,6 +524,7 @@ VAR
    END;
   UNTIL (opcion = 's') OR (opcion = 'n');
   UNTIL (opcion = 'n');
+  ordena_particpantes_por_anio;
   END;
  END;
 
@@ -1008,10 +1035,64 @@ VAR
  close(archivo_atletas);
  END;
 
+FUNCTION busca_sede_descripcion(anio_comp: integer): string;
+VAR
+ f: boolean;
+ BEGIN
+ reset(archivo_sedes);
+ f:= false;
+ REPEAT
+ read(archivo_sedes,registro_sedes);
+ IF anio_comp = registro_sedes.anio_competencia THEN
+  f:= true;
+ UNTIL eof(archivo_sedes) OR (f = true);
+ IF f = true THEN
+  busca_sede_descripcion:= registro_sedes.descripcion;
+ close(archivo_sedes);
+ END;
+
+FUNCTION busca_descripcion_disciplina(cod_dis: string): string;
+VAR
+ f: boolean;
+ BEGIN
+ f:= false;
+ reset(archivo_disciplinas);
+ REPEAT
+ read(archivo_disciplinas,registro_disciplinas);
+ IF cod_dis = registro_disciplinas.cod_disciplina THEN
+  f:= true;
+ UNTIL eof(archivo_disciplinas) OR (f = true);
+ IF f = true THEN
+   busca_descripcion_disciplina:= registro_disciplinas.descripcion;
+ close(archivo_disciplinas);
+ END;
+
+PROCEDURE ubica_dni_en_participantes(documento: string);
+VAR
+ anio_comp: integer;
+ sede,almacena_desc_dis,cod_dis: string;
+ BEGIN
+ reset(archivo_participantes);
+ WHILE NOT eof(archivo_participantes) DO
+  BEGIN
+  read(archivo_participantes,registro_participantes);
+  IF documento = registro_participantes.dni THEN
+   BEGIN
+   anio_comp:= registro_participantes.anio_competencia;
+   sede:= busca_sede_descripcion(anio_comp);
+   writeln('SEDE: ',sede);
+   writeln('-----------');
+   cod_dis:= registro_participantes.cod_disciplina;
+   almacena_desc_dis:= busca_descripcion_disciplina(cod_dis);
+   writeln('CODIGO DISCIPLINA: ',registro_participantes.cod_disciplina,' DESCRIPCION: ',almacena_desc_dis);
+   END;
+  END;
+ close(archivo_participantes);
+ END;
 
 PROCEDURE muestra_trayectoria_atleta;
 VAR
- documento: string;
+ documento,nom_ape,opcion: string;
  BEGIN
  reset(archivo_atletas);
  IF verifica_estado_archivo_atletas = true THEN
@@ -1031,11 +1112,32 @@ VAR
   readln(documento);
   IF existe_atleta(documento) = true THEN
    BEGIN
-
+   nom_ape:= busca_atleta(documento);
+   writeln('NOMBRE DEL ATLETA: ',nom_ape);
+   ubica_dni_en_participantes(documento);
    END
   ELSE
-
-  UNTIL
+   BEGIN
+   textcolor(lightred);
+   writeln('========================');
+   writeln('X No existe ese atleta X');
+   writeln('========================');
+   writeln();
+   END;
+  REPEAT
+  writeln('Desea volver a ver otra trayectoria de otro atleta[s/n]?: ');
+  readln(opcion);
+  IF (opcion <> 's') AND (opcion <> 'n') THEN
+   BEGIN
+   textcolor(lightred);
+   writeln();
+   writeln('========================================');
+   writeln('X Valor incorrecto. Ingrese nuevamente X');
+   writeln('========================================');
+   writeln();
+   END;
+  UNTIL (opcion = 's') OR (opcion = 'n');
+  UNTIL (opcion = 'n');
   END;
  END;
 
