@@ -755,17 +755,24 @@ VAR
  BEGIN
  REPEAT
  clrscr;
+ textcolor(lightgreen);
  writeln('------------------');
  writeln('MENU PRINCIPAL ABM');
  writeln('------------------');
  writeln();
+ textcolor(lightmagenta);
  writeln('------------------------------------');
  writeln('1. Altas');
+ writeln('------------------------------------');
  writeln('2. Bajas(solo para el archivo sedes)');
+ writeln('------------------------------------');
  writeln('3. Modificaciones(solo para el archivo sedes)');
+ writeln('------------------------------------');
  writeln('4. Volver al menu principal');
  writeln('------------------------------------');
  writeln();
+ textcolor(yellow);
+ writeln('====================================');
  write('Seleccione opcion: ');
  readln(opcion);
  CASE opcion OF
