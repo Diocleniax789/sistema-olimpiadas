@@ -2,6 +2,8 @@ PROGRAM sistemas_olimpiadas;
 USES crt;
 
 TYPE
+    total_medallas = array[1..3]of integer;
+
     atletas = RECORD
             dni: string;
             nombre_apellido: string;
@@ -51,6 +53,7 @@ archivo_sedes: FILE OF sedes;
 registro_sedes: sedes;
 archivo_medallasXatletas: FILE OF medallasXatletas;
 registro_medallasXatletas: medallasXatletas;
+tot_medal: total_medallas;
 
 PROCEDURE incializar_arreglo_medallas;
 VAR
@@ -1067,9 +1070,30 @@ VAR
  close(archivo_disciplinas);
  END;
 
+PROCEDURE contador_medallas(documento: string; anio_comp: integer);
+VAR
+ f:integer;
+ BEGIN
+ reset(archivo_medallasXatletas);
+ WHILE NOT eof(archivo_medallasXatletas) DO
+  BEGIN
+  read(archivo_medallasXatletas,registro_medallasXatletas);
+  IF documento = registro_medallasXatletas.dni THEN
+   IF anio_comp = registro_medallasXatletas.anio_competencia THEN
+    BEGIN
+    FOR f:= 1 TO 3 DO
+     BEGIN
+      IF registro_medallasXatletas.medalla[f] = 1 THEN
+       tot_medal[f]:= tot_medal[f] + 1;
+     END;
+    END;
+  END;
+ close(archivo_medallasXatletas);
+ END;
+
 PROCEDURE ubica_dni_en_participantes(documento: string);
 VAR
- anio_comp: integer;
+ anio_comp,f: integer;
  sede,almacena_desc_dis,cod_dis: string;
  BEGIN
  reset(archivo_participantes);
@@ -1090,6 +1114,13 @@ VAR
    writeln('------------------------------------------------------------------------------------------------');
    END;
   END;
+  contador_medallas(documento,anio_comp);
+  writeln('ORO | PLATA | BRONCE');
+  writeln('--------------------');
+  FOR f:= 1 TO 3 DO
+   BEGIN
+   write(tot_medal[1],'|',tot_medal[2],'|',tot_medal[3]);
+   END;
  close(archivo_participantes);
  END;
 
