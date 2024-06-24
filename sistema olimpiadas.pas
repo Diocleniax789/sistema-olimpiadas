@@ -1082,9 +1082,12 @@ VAR
    sede:= busca_sede_descripcion(anio_comp);
    writeln('SEDE: ',sede);
    writeln('-----------');
+   writeln();
    cod_dis:= registro_participantes.cod_disciplina;
    almacena_desc_dis:= busca_descripcion_disciplina(cod_dis);
-   writeln('CODIGO DISCIPLINA: ',registro_participantes.cod_disciplina,' DESCRIPCION: ',almacena_desc_dis);
+   writeln('CODIGO DISCIPLINA: ',registro_participantes.cod_disciplina,'|','DESCRIPCION: ',almacena_desc_dis);
+   writeln();
+   writeln('------------------------------------------------------------------------------------------------');
    END;
   END;
  close(archivo_participantes);
@@ -1107,13 +1110,17 @@ VAR
  ELSE
   BEGIN
   REPEAT
+  clrscr;
   writeln('INGRESE UN ATLETA MEDIANTE SU DNI PARA VER SU TRAYECTORIA');
   writeln('---------------------------------------------------------');
   readln(documento);
   IF existe_atleta(documento) = true THEN
    BEGIN
    nom_ape:= busca_atleta(documento);
-   writeln('NOMBRE DEL ATLETA: ',nom_ape);
+   writeln('======================================');
+   writeln('|| NOMBRE DEL ATLETA: ',nom_ape);
+   writeln('======================================');
+   writeln();
    ubica_dni_en_participantes(documento);
    END
   ELSE
@@ -1125,6 +1132,7 @@ VAR
    writeln();
    END;
   REPEAT
+  writeln();
   writeln('Desea volver a ver otra trayectoria de otro atleta[s/n]?: ');
   readln(opcion);
   IF (opcion <> 's') AND (opcion <> 'n') THEN
