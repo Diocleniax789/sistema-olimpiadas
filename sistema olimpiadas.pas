@@ -1300,6 +1300,21 @@ VAR
   END;
  END;
 
+PROCEDURE muestra_mayor_sede;
+ BEGIN
+ IF verifica_estado_archivo_medallasXatletas = true THEN
+  BEGIN
+  textcolor(lightred);
+  writeln('========================================');
+  writeln('X El archivo esta vacio. Intente luego X');
+  writeln('========================================');
+  delay(2000);
+  END
+ ELSE
+  BEGIN
+  END;
+ END;
+
 PROCEDURE menu_principal;
 VAR
   opcion: integer;
@@ -1361,9 +1376,11 @@ VAR
             clrscr;
             muestra_disciplina_participantes;
             END;
-       {  7: BEGIN
+         7: BEGIN
+            clrscr;
+            muestra_mayor_sede;
             END;
-         8: BEGIN
+       {  8: BEGIN
             END; }
 
     END;
