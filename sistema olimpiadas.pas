@@ -1300,6 +1300,52 @@ VAR
   END;
  END;
 
+FUNCTION recorre_y_acumula_medallas_participantes(sede: string): integer;
+VAR
+ acum_medallas,f,i: integer;
+ BEGIN
+ reset(archivo_medallasXatletas);
+ acum_medallas:= 0;
+ FOR f:= 0 TO filesize(archivo_medallasXatletas) - 1 DO
+  BEGIN
+  read(archivo_medallasXatletas,registro_medallasXatletas);
+  IF sede = registro_medallasXatletas.cod_internacional THEN
+   BEGIN
+   FOR i:= 1 TO 3 DO
+    BEGIN
+    IF registro_medallasXatletas.medalla[i] = 1 THEN
+     acum_medallas:= acum_medallas + 1;
+    END;
+   END;
+  END;
+ close(archivo_medallasXatletas);
+ recorre_y_acumula_medallas_participantes:= acum_medallas;
+ END;
+
+PROCEDURE muestra_la_mayor_cantidad;
+VAR
+ sede,sede_mayor: string;
+ mayor: integer;
+ BEGIN
+ reset(archivo_sedes);
+ mayor:= 0;
+ sede_mayor:= '';
+ WHILE NOT eof(archivo_sedes) DO
+  BEGIN
+  read(archivo_sedes,registro_sedes);
+  sede:= registro_sedes.cod_internacional;
+  IF recorre_y_acumula_medallas_participantes(sede) > 0 THEN
+   BEGIN
+   mayor:= recorre_y_acumula_medallas_participantes(sede);
+   sede_mayor:= sede;
+   END;
+  END;
+  close(archivo_sedes);
+ writeln();
+ writeln('SEDE CON LA MAYOR CANTIDAD DE MEDALLAS: ',sede_mayor);
+ writeln('CANTIDAD DE MEDALLAS: ',mayor);
+ END;
+
 PROCEDURE muestra_mayor_sede;
  BEGIN
  IF verifica_estado_archivo_medallasXatletas = true THEN
@@ -1312,6 +1358,10 @@ PROCEDURE muestra_mayor_sede;
   END
  ELSE
   BEGIN
+  muestra_la_mayor_cantidad;
+  writeln();
+  writeln('Pulse enter para volver al menu principal...');
+  readln();
   END;
  END;
 
