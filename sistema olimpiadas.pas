@@ -602,6 +602,9 @@ VAR
    writeln();
    write('>>> Ingrese descripcion: ');
    readln(registro_sedes.descripcion);
+   writeln();
+   anio:= valida_anio_competencia;
+   registro_sedes.anio_competencia:= anio;
    registro_sedes.activo:= true;
    seek(archivo_sedes,filesize(archivo_sedes));
    write(archivo_sedes,registro_sedes);
@@ -1318,6 +1321,9 @@ VAR
     END;
    END;
   END;
+ writeln(acum_medallas);
+ delay(3000);
+
  close(archivo_medallasXatletas);
  recorre_y_acumula_medallas_participantes:= acum_medallas;
  END;
@@ -1325,25 +1331,25 @@ VAR
 PROCEDURE muestra_la_mayor_cantidad;
 VAR
  sede,sede_mayor: string;
- mayor: integer;
+ mayor,f,total: integer;
  BEGIN
  reset(archivo_sedes);
  mayor:= 0;
  sede_mayor:= '';
- WHILE NOT eof(archivo_sedes) DO
+ FOR f:= 0 TO filesize(archivo_sedes) - 1 DO
   BEGIN
   read(archivo_sedes,registro_sedes);
   sede:= registro_sedes.cod_internacional;
-  IF recorre_y_acumula_medallas_participantes(sede) > 0 THEN
+  total:= recorre_y_acumula_medallas_participantes(sede);
+  IF total > 0 THEN
    BEGIN
-   mayor:= recorre_y_acumula_medallas_participantes(sede);
+   mayor:=  total;
    sede_mayor:= sede;
    END;
   END;
+  writeln('SEDE CON LA MAYOR CANTIDAD DE MEDALLAS: ',sede_mayor);
+  writeln('CANTIDAD DE MEDALLAS: ',mayor);
   close(archivo_sedes);
- writeln();
- writeln('SEDE CON LA MAYOR CANTIDAD DE MEDALLAS: ',sede_mayor);
- writeln('CANTIDAD DE MEDALLAS: ',mayor);
  END;
 
 PROCEDURE muestra_mayor_sede;
