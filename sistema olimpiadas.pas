@@ -28,6 +28,7 @@ TYPE
 
     sedes = RECORD
           cod_internacional: string;
+
           descripcion: string;
           anio_competencia: integer;
           activo: boolean;
@@ -1321,9 +1322,6 @@ VAR
     END;
    END;
   END;
- writeln(acum_medallas);
- delay(3000);
-
  close(archivo_medallasXatletas);
  recorre_y_acumula_medallas_participantes:= acum_medallas;
  END;
@@ -1341,14 +1339,17 @@ VAR
   read(archivo_sedes,registro_sedes);
   sede:= registro_sedes.cod_internacional;
   total:= recorre_y_acumula_medallas_participantes(sede);
-  IF total > 0 THEN
+  IF total > mayor THEN
    BEGIN
    mayor:=  total;
    sede_mayor:= sede;
    END;
   END;
-  writeln('SEDE CON LA MAYOR CANTIDAD DE MEDALLAS: ',sede_mayor);
-  writeln('CANTIDAD DE MEDALLAS: ',mayor);
+  writeln('====================================================');
+  writeln('|| SEDE CON LA MAYOR CANTIDAD DE MEDALLAS: ',sede_mayor);
+  writeln('===================================================');
+  writeln('|| CANTIDAD DE MEDALLAS: ',mayor);
+  writeln('===================================================');
   close(archivo_sedes);
  END;
 
@@ -1369,6 +1370,19 @@ PROCEDURE muestra_mayor_sede;
   writeln('Pulse enter para volver al menu principal...');
   readln();
   END;
+ END;
+
+PROCEDURE muestra_top_rankin_10;
+ BEGIN
+  IF verifica_estado_archivo_medallasXatletas = true THEN
+  BEGIN
+  textcolor(lightred);
+  writeln('========================================');
+  writeln('X El archivo esta vacio. Intente luego X');
+  writeln('========================================');
+  delay(2000);
+  END
+
  END;
 
 PROCEDURE menu_principal;
@@ -1436,8 +1450,10 @@ VAR
             clrscr;
             muestra_mayor_sede;
             END;
-       {  8: BEGIN
-            END; }
+         8: BEGIN
+            clrscr;
+            muestra_top_rankin_10;
+            END;
 
     END;
    UNTIL (opcion = 9);
