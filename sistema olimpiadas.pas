@@ -4,6 +4,8 @@ USES crt;
 TYPE
     total_medallas = array[1..3]of integer;
 
+    total_medallas_por_cada_atleta= array [1..5,1..3]of integer;
+
     atletas = RECORD
             dni: string;
             nombre_apellido: string;
@@ -55,6 +57,7 @@ registro_sedes: sedes;
 archivo_medallasXatletas: FILE OF medallasXatletas;
 registro_medallasXatletas: medallasXatletas;
 tot_medal: total_medallas;
+totali_medallas: total_medallas_por_cada_atleta;
 
 PROCEDURE incializar_arreglo_medallas;
 VAR
@@ -1372,17 +1375,143 @@ PROCEDURE muestra_mayor_sede;
   END;
  END;
 
+PROCEDURE recorre_archivo_medallasXatletas(documento: string; i: integer);
+VAR
+ f,acum_medallas_oro,acum_medallas_plata,acum_medallas_bronce,d: integer;
+ BEGIN
+ reset(archivo_medallasXatletas);
+ acum_medallas_oro:= 0;
+ acum_medallas_plata:= 0;
+ acum_medallas_bronce:= 0;
+ WHILE NOT eof(archivo_medallasXatletas) DO
+  BEGIN
+  IF documento = registro_medallasXatletas.dni THEN
+   BEGIN
+   FOR f:= 1 TO 3 DO
+    BEGIN
+     IF f = 1 THEN
+      acum_medallas_oro:= acum_medallas_oro + 1
+      ELSE
+       IF f = 2 THEN
+         acum_medallas_plata:= acum_medallas_plata + 1
+       ELSE
+         acum_medallas_bronce:= acum_medallas_bronce + 1;
+    END;
+   END;
+  END;
+ FOR d:= 1 TO 3 DO
+  BEGIN
+  IF d = 1 THEN
+   totali_medallas[i,d]:= acum_medallas_oro
+    ELSE
+     IF d = 2 THEN
+       totali_medallas[i,d]:=  acum_medallas_plata
+     ELSE
+       totali_medallas[i,d]:=  acum_medallas_bronce;
+  END;
+ close(archivo_medallasXatletas);
+ END;
+
+PROCEDURE ordena_de_mayor_a_menor_medallas_oro;
+VAR
+ i,j,k,aux: integer;
+ BEGIN
+ FOR i:= 1 TO 5 - 1 DO
+  BEGIN
+   FOR j:= i + 1 TO 5 DO
+    BEGIN
+    IF totali_medallas[i,1] < totali_medallas[j,1] THEN
+     BEGIN
+     FOR k:= 1 TO 3 DO
+      BEGIN
+      aux:= totali_medallas[i,k];
+      totali_medallas[i,k]:= totali_medallas [j,k];
+      totali_medallas[j,k]:= aux;
+      END;
+     END;
+    END;
+  END;
+ END;
+
+PROCEDURE ordena_de_mayor_a_menor_medallas_plata;
+VAR
+ i,j,k,aux: integer;
+ BEGIN
+ FOR i:= 1 TO 5 - 1 DO
+  BEGIN
+   FOR j:= i + 1 TO 5 DO
+    BEGIN
+    IF totali_medallas[i,2] < totali_medallas[j,2] THEN
+     BEGIN
+     FOR k:= 1 TO 3 DO
+      BEGIN
+      aux:= totali_medallas[i,k];
+      totali_medallas[i,k]:= totali_medallas [j,k];
+      totali_medallas[j,k]:= aux;
+      END;
+     END;
+    END;
+  END;
+ END;
+
+PROCEDURE ordena_de_mayor_a_menor_medallas_bronce;
+VAR
+ i,j,k,aux: integer;
+ BEGIN
+ FOR i:= 1 TO 5 - 1 DO
+  BEGIN
+   FOR j:= i + 1 TO 5 DO
+    BEGIN
+    IF totali_medallas[i,3] < totali_medallas[j,3] THEN
+     BEGIN
+     FOR k:= 1 TO 3 DO
+      BEGIN
+      aux:= totali_medallas[i,k];
+      totali_medallas[i,k]:= totali_medallas [j,k];
+      totali_medallas[j,k]:= aux;
+      END;
+     END;
+    END;
+  END;
+ END;
+
 PROCEDURE muestra_top_rankin_10;
+VAR
+ i,f,h,k: integer;
+ documento: string;
  BEGIN
   IF verifica_estado_archivo_medallasXatletas = true THEN
+   BEGIN
+   textcolor(lightred);
+   writeln('========================================');
+   writeln('X El archivo esta vacio. Intente luego X');
+   writeln('========================================');
+   delay(2000);
+   END
+  ELSE
+   BEGIN
+   reset(archivo_atletas);
+   i:= 0;
+   FOR f:= 0 TO filesize(archivo_atletas) - 1 DO
+    BEGIN
+    i:= i + 1;
+    documento:= registro_atletas.dni;
+    recorre_archivo_medallasXatletas(documento,i);
+    END;
+   close(archivo_atletas);
+   END;
+ ordena_de_mayor_a_menor_medallas_oro;
+ ordena_de_mayor_a_menor_medallas_plata;
+ ordena_de_mayor_a_menor_medallas_bronce;
+ FOR h:= 1 TO 5 DO
   BEGIN
-  textcolor(lightred);
-  writeln('========================================');
-  writeln('X El archivo esta vacio. Intente luego X');
-  writeln('========================================');
-  delay(2000);
-  END
-
+   FOR k:= 1 TO 3 DO
+    BEGIN
+    write(totali_medallas[h,k]);
+    END;
+  END;
+ writeln('Presione enter para salir...');
+ readln();
  END;
 
 PROCEDURE menu_principal;
