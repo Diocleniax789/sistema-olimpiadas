@@ -2,12 +2,14 @@ PROGRAM sistemas_olimpiadas;
 USES crt;
 
 CONST
-     FIL = 2;
+     FIL = 1;
      COL = 3;
 TYPE
     total_medallas = array[1..3]of integer;
 
-    total_medallas_por_cada_atleta= array [1..FIL,1..COL]of integer;
+    total_medallas_por_cada_atleta= array [0..FIL,0..COL]of integer;
+
+    lista_atletas = array[0..FIL]of string;
 
     atletas = RECORD
             dni: string;
@@ -61,6 +63,7 @@ archivo_medallasXatletas: FILE OF medallasXatletas;
 registro_medallasXatletas: medallasXatletas;
 tot_medal: total_medallas;
 totali_medallas: total_medallas_por_cada_atleta;
+atletas_lista: lista_atletas;
 
 PROCEDURE incializar_arreglo_medallas;
 VAR
@@ -69,6 +72,16 @@ VAR
  FOR f:= 1 TO 3 DO
   BEGIN
   registro_medallasXatletas.medalla[f]:= 0;
+  END;
+ END;
+
+PROCEDURE inicializar_arreglo_medallas_totales;
+VAR
+ f: integer;
+ BEGIN
+ FOR f:= 0 TO FIL DO
+  BEGIN
+   totali_medallas[f,0]:= f;
   END;
  END;
 
@@ -1411,13 +1424,13 @@ PROCEDURE ordena_de_mayor_a_menor_medallas_oro;
 VAR
  i,j,k,aux: integer;
  BEGIN
- FOR i:= 1 TO FIL - 1 DO
+ FOR i:= 0 TO FIL - 1 DO
   BEGIN
    FOR j:= i + 1 TO FIL DO
     BEGIN
     IF totali_medallas[i,1] < totali_medallas[j,1] THEN
      BEGIN
-     FOR k:= 1 TO 3 DO
+     FOR k:= 0 TO COL DO
       BEGIN
       aux:= totali_medallas[i,k];
       totali_medallas[i,k]:= totali_medallas [j,k];
@@ -1432,13 +1445,13 @@ PROCEDURE ordena_de_mayor_a_menor_medallas_plata;
 VAR
  i,j,k,aux: integer;
  BEGIN
- FOR i:= 1 TO 5 - 1 DO
+ FOR i:= 0 TO FIL - 1 DO
   BEGIN
-   FOR j:= i + 1 TO 5 DO
+   FOR j:= i + i TO FIL  DO
     BEGIN
     IF totali_medallas[i,2] < totali_medallas[j,2] THEN
      BEGIN
-     FOR k:= 1 TO 3 DO
+     FOR k:= 0 TO COL DO
       BEGIN
       aux:= totali_medallas[i,k];
       totali_medallas[i,k]:= totali_medallas [j,k];
@@ -1453,13 +1466,13 @@ PROCEDURE ordena_de_mayor_a_menor_medallas_bronce;
 VAR
  i,j,k,aux: integer;
  BEGIN
- FOR i:= 1 TO 5 - 1 DO
+ FOR i:= 0 TO FIL - 1 DO
   BEGIN
-   FOR j:= i + 1 TO 5 DO
+   FOR j:= i + 1 TO FIL DO
     BEGIN
     IF totali_medallas[i,3] < totali_medallas[j,3] THEN
      BEGIN
-     FOR k:= 1 TO 3 DO
+     FOR k:= 0 TO COL DO
       BEGIN
       aux:= totali_medallas[i,k];
       totali_medallas[i,k]:= totali_medallas [j,k];
@@ -1470,9 +1483,37 @@ VAR
   END;
  END;
 
+{FUNCTION busca_atleta_al_arreglo(position: integer): string;
+ BEGIN
+ reset(archivo_atletas);
+ seek(archivo_atletas,position);
+ read(archivo_atletas,registro_atletas);
+ busca_atleta_al_arreglo:= registro_atletas.nombre_apellido;
+ close(archivo_atletas);
+ END;
+
+PROCEDURE muestra_resultados;
+VAR
+ x,h,f, position: integer;
+ BEGIN
+ FOR f:= 0 TO FIL DO
+  BEGIN
+   position:= totali_medallas[f,1];
+   atletas_lista[f]:= busca_atleta_al_arreglo(position);
+  END;
+  FOR h:= 0 TO FIL DO
+   BEGIN
+    writeln(atletas_lista[h]);
+   END;
+  FOR x:= 0 TO FIL DO
+   BEGIN
+    writeln(totali_medallas[f,1]);
+   END;
+ END;  }
+
 PROCEDURE muestra_top_rankin_10;
 VAR
- i,f: integer;
+ i,f,h,l: integer;
  documento: string;
  BEGIN
   IF verifica_estado_archivo_medallasXatletas = true THEN
@@ -1486,23 +1527,28 @@ VAR
   ELSE
    BEGIN
    reset(archivo_atletas);
-   i:= 0;
+   i:= -1;
    FOR f:= 0 TO filesize(archivo_atletas) - 1 DO
     BEGIN
     i:= i + 1;
     read(archivo_atletas,registro_atletas);
     documento:= registro_atletas.dni;
-    writeln(documento);
     recorre_archivo_medallasXatletas(documento,i);
     END;
    close(archivo_atletas);
    ordena_de_mayor_a_menor_medallas_oro;
    ordena_de_mayor_a_menor_medallas_plata;
    ordena_de_mayor_a_menor_medallas_bronce;
- {  FOR h:= 1 TO FIL DO
-    BEGIN
-    writeln(totali_medallas[h,1]);
-    END; }
+   {muestra_resultados; }
+   FOR h:= 0 TO FIL DO
+     BEGIN
+      FOR l:= 0 TO COL DO
+       BEGIN
+        write(totali_medallas[h,l]);
+       END;
+       writeln();
+     END;
+   writeln();
    writeln('Presione enter para salir...');
    readln();
    END;
@@ -1588,6 +1634,7 @@ assign(archivo_disciplinas,'C:\Users\JULIO\Desktop\sistema-olimpiadas\disciplina
 assign(archivo_participantes,'C:\Users\JULIO\Desktop\sistema-olimpiadas\participantes.dat');
 assign(archivo_sedes,'C:\Users\JULIO\Desktop\sistema-olimpiadas\sedes.dat');
 assign(archivo_medallasXatletas,'C:\Users\JULIO\Desktop\sistema-olimpiadas\medallasXatletas.dat');
+inicializar_arreglo_medallas_totales;
 crear_archivo_atletas;
 crear_archivo_disciplinas;
 crear_archivo_participantes;
