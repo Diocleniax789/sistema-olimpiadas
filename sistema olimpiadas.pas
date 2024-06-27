@@ -2,7 +2,7 @@ PROGRAM sistemas_olimpiadas;
 USES crt;
 
 CONST
-     FIL = 2;
+     FIL = 1;
      COL = 3;
 TYPE
     total_medallas = array[1..3]of integer;
@@ -1536,14 +1536,28 @@ VAR
    ordena_de_mayor_a_menor_medallas_plata;
    ordena_de_mayor_a_menor_medallas_bronce;
    muestra_resultados;
+   writeln('==================================');
+   writeln('||/////// MEDALLAS DE ORO///////||');
+   writeln('==================================');
+   writeln('||  Atletas con mayor cantidad  ||');
+   writeln('==================================');
+   writeln();
    FOR h:= 0 TO FIL DO
+    BEGIN
+    writeln('------------------------------------');
+    write(' | ',totali_medallas[h,1],' | ');
+    writeln();
+    writeln('------------------------------------');
+    END;
+
+  { FOR h:= 0 TO FIL DO
      BEGIN
       FOR l:= 0 TO COL DO
        BEGIN
         write(totali_medallas[h,l]);
        END;
        writeln();
-     END;
+     END;            }
    writeln();
    writeln('Presione enter para salir...');
    readln();
