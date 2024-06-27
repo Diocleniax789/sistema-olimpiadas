@@ -1501,15 +1501,60 @@ VAR
    position:= totali_medallas[f,0];
    atletas_lista[f]:= busca_atleta_al_arreglo(position);
   END;
+  writeln();
+  writeln('RANKING TOP ATLETAS CON MAS MEDALLAS');
+  writeln('------------------------------------');
+  writeln();
   FOR h:= 0 TO FIL DO
    BEGIN
     writeln(atletas_lista[h]);
+    writeln('------------------------------------');
+   END;
+ END;
+
+PROCEDURE muestra_resultados_2;
+VAR
+ h,f,position: integer;
+ BEGIN
+ FOR f:= 0 TO FIL DO
+  BEGIN
+   position:= totali_medallas[f,0];
+   atletas_lista[f]:= busca_atleta_al_arreglo(position);
+  END;
+  writeln();
+  writeln('RANKING TOP ATLETAS CON MAS MEDALLAS');
+  writeln('------------------------------------');
+  writeln();
+  FOR h:= 0 TO FIL DO
+   BEGIN
+    writeln(atletas_lista[h]);
+    writeln('------------------------------------');
+   END;
+ END;
+
+PROCEDURE muestra_resultados_3;
+VAR
+ h,f,position: integer;
+ BEGIN
+ FOR f:= 0 TO FIL DO
+  BEGIN
+   position:= totali_medallas[f,0];
+   atletas_lista[f]:= busca_atleta_al_arreglo(position);
+  END;
+  writeln();
+  writeln('RANKING TOP ATLETAS CON MAS MEDALLAS');
+  writeln('------------------------------------');
+  writeln();
+  FOR h:= 0 TO FIL DO
+   BEGIN
+    writeln(atletas_lista[h]);
+    writeln('------------------------------------');
    END;
  END;
 
 PROCEDURE muestra_top_rankin_10;
 VAR
- i,f,h,l: integer;
+ i,f,h: integer;
  documento: string;
  BEGIN
   IF verifica_estado_archivo_medallasXatletas = true THEN
@@ -1533,9 +1578,13 @@ VAR
     END;
    close(archivo_atletas);
    ordena_de_mayor_a_menor_medallas_oro;
-   ordena_de_mayor_a_menor_medallas_plata;
-   ordena_de_mayor_a_menor_medallas_bronce;
+   textcolor(lightgreen);
+   writeln('============================================================================');
+   writeln('|| ESTA LISTA DE ATLETAS ESTA EN EL ORDEN SEGUN QUIEN TENGA MAS MEDALLAS. ||');
+   writeln('|| LAS MEDALLAS PUEDEN VERSE DEBAJO DE ESTA LISTA.                        ||');
+   writeln('============================================================================');
    muestra_resultados;
+   textcolor(yellow);
    writeln('==================================');
    writeln('||/////// MEDALLAS DE ORO///////||');
    writeln('==================================');
@@ -1544,20 +1593,43 @@ VAR
    writeln();
    FOR h:= 0 TO FIL DO
     BEGIN
-    writeln('------------------------------------');
+    writeln('----------------------------------');
     write(' | ',totali_medallas[h,1],' | ');
     writeln();
-    writeln('------------------------------------');
+    writeln('----------------------------------');
     END;
-
-  { FOR h:= 0 TO FIL DO
-     BEGIN
-      FOR l:= 0 TO COL DO
-       BEGIN
-        write(totali_medallas[h,l]);
-       END;
-       writeln();
-     END;            }
+   ordena_de_mayor_a_menor_medallas_plata;
+   muestra_resultados_2;
+   textcolor(white);
+   writeln('====================================');
+   writeln('||/////// MEDALLAS DE PLATA///////||');
+   writeln('====================================');
+   writeln('||   Atletas con mayor cantidad   ||');
+   writeln('====================================');
+   writeln();
+   FOR h:= 0 TO FIL DO
+    BEGIN
+    writeln('----------------------------------');
+    write(' | ',totali_medallas[h,2],' | ');
+    writeln();
+    writeln('----------------------------------');
+    END;
+   ordena_de_mayor_a_menor_medallas_bronce;
+   muestra_resultados_3;
+   textcolor(brown);
+   writeln('====================================');
+   writeln('||/////// MEDALLAS DE BRONCE///////||');
+   writeln('====================================');
+   writeln('||   Atletas con mayor cantidad   ||');
+   writeln('====================================');
+   writeln();
+   FOR h:= 0 TO FIL DO
+    BEGIN
+    writeln('----------------------------------');
+    write(' | ',totali_medallas[h,3],' | ');
+    writeln();
+    writeln('----------------------------------');
+    END;
    writeln();
    writeln('Presione enter para salir...');
    readln();
