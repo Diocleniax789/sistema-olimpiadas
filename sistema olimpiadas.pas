@@ -4,6 +4,7 @@ USES crt;
 CONST
      FIL = 4;
      COL = 3;
+
 TYPE
     total_medallas = array[1..3]of integer;
 
@@ -1642,6 +1643,13 @@ VAR
    BEGIN
    REPEAT
     clrscr;
+    textcolor(lightmagenta);
+    writeln('=====================================================');
+    writeln('||/////////////////////////////////////////////////||');
+    writeln('||SOFTWARE DE GESTION DE ATLETAS DE LAS OLIMPIADAS ||');
+    writeln('||/////////////////////////////////////////////////||');
+    writeln('=====================================================');
+    writeln();
     textcolor(lightgreen);
     writeln('--------------');
     writeln('MENU PRINCIPAL');
