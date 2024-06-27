@@ -1378,9 +1378,9 @@ PROCEDURE muestra_mayor_sede;
   END;
  END;
 
-{PROCEDURE recorre_archivo_medallasXatletas(documento: string; i: integer);
+PROCEDURE recorre_archivo_medallasXatletas(documento: string; i: integer);
 VAR
- l,f,acum_medallas_oro,acum_medallas_plata,acum_medallas_bronce,d,h: integer;
+ l,acum_medallas_oro,acum_medallas_plata,acum_medallas_bronce: integer;
  BEGIN
  reset(archivo_medallasXatletas);
  acum_medallas_oro:= 0;
@@ -1388,29 +1388,28 @@ VAR
  acum_medallas_bronce:= 0;
  FOR l:= 0 TO filesize(archivo_medallasXatletas) - 1 DO
   BEGIN
+  read(archivo_medallasXatletas,registro_medallasXatletas);
   IF documento = registro_medallasXatletas.dni THEN
-   BEGIN
-   FOR f:= 1 TO 3 DO
+   IF registro_medallasXatletas.medalla[1] = 1 THEN
+    acum_medallas_oro:= acum_medallas_oro + 1
+   ELSE
     BEGIN
-     IF registro_medallasXatletas.medalla[f] = 1 THEN
-      acum_medallas_oro:= acum_medallas_oro + 1;
-    {  ELSE
-       IF registro_medallasXatletas.medalla[k] = 1 THEN
-         acum_medallas_plata:= acum_medallas_plata + 1
-       ELSE
-         acum_medallas_bronce:= acum_medallas_bronce + 1;    }
+    IF registro_medallasXatletas.medalla[2] = 1 THEN
+      acum_medallas_plata:= acum_medallas_plata + 1
+    ELSE
+    IF registro_medallasXatletas.medalla[3] = 1 THEN
+       acum_medallas_bronce:= acum_medallas_bronce + 1;
     END;
-   END;
   END;
   totali_medallas[i,1]:= acum_medallas_oro ;
   totali_medallas[i,2]:=  acum_medallas_plata;
   totali_medallas[i,3]:=  acum_medallas_bronce;
  close(archivo_medallasXatletas);
- END;    }
+ END;
 
-{PROCEDURE ordena_de_mayor_a_menor_medallas_oro;
+PROCEDURE ordena_de_mayor_a_menor_medallas_oro;
 VAR
- i,j,k,aux,h: integer;
+ i,j,k,aux: integer;
  BEGIN
  FOR i:= 1 TO FIL - 1 DO
   BEGIN
@@ -1427,10 +1426,9 @@ VAR
      END;
     END;
   END;
+ END;
 
- END;     }
-
-{PROCEDURE ordena_de_mayor_a_menor_medallas_plata;
+PROCEDURE ordena_de_mayor_a_menor_medallas_plata;
 VAR
  i,j,k,aux: integer;
  BEGIN
@@ -1470,11 +1468,11 @@ VAR
      END;
     END;
   END;
- END;       }
+ END;
 
 PROCEDURE muestra_top_rankin_10;
 VAR
- i,f,h: integer;
+ i,f: integer;
  documento: string;
  BEGIN
   IF verifica_estado_archivo_medallasXatletas = true THEN
@@ -1495,16 +1493,16 @@ VAR
     read(archivo_atletas,registro_atletas);
     documento:= registro_atletas.dni;
     writeln(documento);
-   { recorre_archivo_medallasXatletas(documento,i); }
+    recorre_archivo_medallasXatletas(documento,i);
     END;
    close(archivo_atletas);
- {  ordena_de_mayor_a_menor_medallas_oro;        }
-   { ordena_de_mayor_a_menor_medallas_plata;}
-   { ordena_de_mayor_a_menor_medallas_bronce; }
-   FOR h:= 1 TO FIL DO
+   ordena_de_mayor_a_menor_medallas_oro;
+   ordena_de_mayor_a_menor_medallas_plata;
+   ordena_de_mayor_a_menor_medallas_bronce;
+ {  FOR h:= 1 TO FIL DO
     BEGIN
     writeln(totali_medallas[h,1]);
-    END;
+    END; }
    writeln('Presione enter para salir...');
    readln();
    END;
