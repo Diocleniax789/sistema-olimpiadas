@@ -2,7 +2,7 @@ PROGRAM sistemas_olimpiadas;
 USES crt;
 
 CONST
-     FIL = 1;
+     FIL = 4;
      COL = 3;
 TYPE
     total_medallas = array[1..3]of integer;
@@ -1502,13 +1502,13 @@ VAR
    atletas_lista[f]:= busca_atleta_al_arreglo(position);
   END;
   writeln();
-  writeln('RANKING TOP ATLETAS CON MAS MEDALLAS');
-  writeln('------------------------------------');
+  writeln('RANKING TOP 3 ATLETAS CON MAS MEDALLAS DE ORO');
+  writeln('---------------------------------------------');
   writeln();
-  FOR h:= 0 TO FIL DO
+  FOR h:= 0 TO 2 DO
    BEGIN
     writeln(atletas_lista[h]);
-    writeln('------------------------------------');
+    writeln('-------------------------------------------');
    END;
  END;
 
@@ -1522,13 +1522,13 @@ VAR
    atletas_lista[f]:= busca_atleta_al_arreglo(position);
   END;
   writeln();
-  writeln('RANKING TOP ATLETAS CON MAS MEDALLAS');
-  writeln('------------------------------------');
+  writeln('RANKING TOP ATLETAS CON MAS MEDALLAS DE PLATA');
+  writeln('---------------------------------------------');
   writeln();
-  FOR h:= 0 TO FIL DO
+  FOR h:= 0 TO 2 DO
    BEGIN
     writeln(atletas_lista[h]);
-    writeln('------------------------------------');
+    writeln('-------------------------------------------');
    END;
  END;
 
@@ -1542,13 +1542,13 @@ VAR
    atletas_lista[f]:= busca_atleta_al_arreglo(position);
   END;
   writeln();
-  writeln('RANKING TOP ATLETAS CON MAS MEDALLAS');
-  writeln('------------------------------------');
+  writeln('RANKING TOP ATLETAS CON MAS MEDALLAS DE BRONCE');
+  writeln('----------------------------------------------');
   writeln();
-  FOR h:= 0 TO FIL DO
+  FOR h:= 0 TO 2 DO
    BEGIN
     writeln(atletas_lista[h]);
-    writeln('------------------------------------');
+    writeln('--------------------------------------------');
    END;
  END;
 
@@ -1591,7 +1591,7 @@ VAR
    writeln('||  Atletas con mayor cantidad  ||');
    writeln('==================================');
    writeln();
-   FOR h:= 0 TO FIL DO
+   FOR h:= 0 TO 2 DO
     BEGIN
     writeln('----------------------------------');
     write(' | ',totali_medallas[h,1],' | ');
@@ -1607,7 +1607,7 @@ VAR
    writeln('||   Atletas con mayor cantidad   ||');
    writeln('====================================');
    writeln();
-   FOR h:= 0 TO FIL DO
+   FOR h:= 0 TO 2 DO
     BEGIN
     writeln('----------------------------------');
     write(' | ',totali_medallas[h,2],' | ');
@@ -1623,7 +1623,7 @@ VAR
    writeln('||   Atletas con mayor cantidad   ||');
    writeln('====================================');
    writeln();
-   FOR h:= 0 TO FIL DO
+   FOR h:= 0 TO 2 DO
     BEGIN
     writeln('----------------------------------');
     write(' | ',totali_medallas[h,3],' | ');
