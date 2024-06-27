@@ -1583,8 +1583,8 @@ VAR
    writeln('|| ESTA LISTA DE ATLETAS ESTA EN EL ORDEN SEGUN QUIEN TENGA MAS MEDALLAS. ||');
    writeln('|| LAS MEDALLAS PUEDEN VERSE DEBAJO DE ESTA LISTA.                        ||');
    writeln('============================================================================');
-   muestra_resultados;
    textcolor(yellow);
+   muestra_resultados;
    writeln('==================================');
    writeln('||/////// MEDALLAS DE ORO///////||');
    writeln('==================================');
@@ -1599,8 +1599,8 @@ VAR
     writeln('----------------------------------');
     END;
    ordena_de_mayor_a_menor_medallas_plata;
-   muestra_resultados_2;
    textcolor(white);
+   muestra_resultados_2;
    writeln('====================================');
    writeln('||/////// MEDALLAS DE PLATA///////||');
    writeln('====================================');
@@ -1615,8 +1615,8 @@ VAR
     writeln('----------------------------------');
     END;
    ordena_de_mayor_a_menor_medallas_bronce;
-   muestra_resultados_3;
    textcolor(brown);
+   muestra_resultados_3;
    writeln('====================================');
    writeln('||/////// MEDALLAS DE BRONCE///////||');
    writeln('====================================');
