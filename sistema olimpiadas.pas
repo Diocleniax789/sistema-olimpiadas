@@ -2,7 +2,7 @@ PROGRAM sistemas_olimpiadas;
 USES crt;
 
 CONST
-     FIL = 1;
+     FIL = 2;
      COL = 3;
 TYPE
     total_medallas = array[1..3]of integer;
@@ -1483,7 +1483,7 @@ VAR
   END;
  END;
 
-{FUNCTION busca_atleta_al_arreglo(position: integer): string;
+FUNCTION busca_atleta_al_arreglo(position: integer): string;
  BEGIN
  reset(archivo_atletas);
  seek(archivo_atletas,position);
@@ -1494,22 +1494,18 @@ VAR
 
 PROCEDURE muestra_resultados;
 VAR
- x,h,f, position: integer;
+ h,f, position: integer;
  BEGIN
  FOR f:= 0 TO FIL DO
   BEGIN
-   position:= totali_medallas[f,1];
+   position:= totali_medallas[f,0];
    atletas_lista[f]:= busca_atleta_al_arreglo(position);
   END;
   FOR h:= 0 TO FIL DO
    BEGIN
     writeln(atletas_lista[h]);
    END;
-  FOR x:= 0 TO FIL DO
-   BEGIN
-    writeln(totali_medallas[f,1]);
-   END;
- END;  }
+ END;
 
 PROCEDURE muestra_top_rankin_10;
 VAR
@@ -1539,7 +1535,7 @@ VAR
    ordena_de_mayor_a_menor_medallas_oro;
    ordena_de_mayor_a_menor_medallas_plata;
    ordena_de_mayor_a_menor_medallas_bronce;
-   {muestra_resultados; }
+   muestra_resultados;
    FOR h:= 0 TO FIL DO
      BEGIN
       FOR l:= 0 TO COL DO
