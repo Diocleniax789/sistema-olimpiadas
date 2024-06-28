@@ -844,11 +844,12 @@ VAR
   clrscr;
   reset(archivo_sedes);
   textcolor(green);
-  writeln('PARA DAR DE BAJA UN REGISTRO DEL ARCHIVO, SOLO INGRESE EL NOMBRE DE LA SEDE y el anio correspondiente');
-  writeln('-----------------------------------------------------------------------------------------------------');
+  writeln('PARA DAR DE BAJA UN REGISTRO DEL ARCHIVO, ');
+  writeln('SOLO INGRESE EL NOMBRE DE LA SEDE Y EL ANIO CORRESPONDIENTE');
+  writeln('-----------------------------------------------------------');
   textcolor(magenta);
   writeln();
-  writeln('>>> Ingrese codigo internacional: ');
+  write('>>> Ingrese codigo internacional: ');
   readln(cod_int);
   writeln();
   anio:= valida_anio_competencia();
