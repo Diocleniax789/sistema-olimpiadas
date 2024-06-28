@@ -36,7 +36,6 @@ TYPE
 
     sedes = RECORD
           cod_internacional: string;
-
           descripcion: string;
           anio_competencia: integer;
           activo: boolean;
@@ -754,6 +753,10 @@ VAR
     gotoxy(whereX + 35,whereY);
     writeln('------------------------------');
     gotoxy(whereX + 35,whereY);
+    writeln('1. Alta de atletas');
+    gotoxy(whereX + 35,whereY);
+    writeln('------------------------------');
+    gotoxy(whereX + 35,whereY);
     writeln('2. Alta de disciplinas');
     gotoxy(whereX + 35,whereY);
     writeln('------------------------------');
@@ -805,6 +808,91 @@ VAR
    UNTIL (opcion = 6);
    END;
 
+FUNCTION existe_codigo_internacional_anio(cod_int: string; anio: integer): boolean;
+VAR
+ f: boolean;
+ BEGIN
+ f:= false;
+ REPEAT
+ read(archivo_sedes,registro_sedes);
+ IF cod_int = registro_sedes.cod_internacional THEN
+  IF anio = registro_sedes.anio_competencia THEN
+   f:= true;
+ UNTIL eof(archivo_sedes) OR (f = true);
+ IF f = true THEN
+  existe_codigo_internacional_anio:= true
+ ELSE
+  existe_codigo_internacional_anio:= false;
+ END;
+
+PROCEDURE baja_para_el_registro_sedes;
+VAR
+ anio: integer;
+ cod_int,opcion: string;
+ BEGIN
+ IF verificar_estado_archivo_sedes = true THEN
+  BEGIN
+  textcolor(lightred);
+  writeln('=======================================================');
+  writeln('X NO HAY REGISTROS EN EL ARCHIVO SEDES. INTENTE LUEGO X');
+  writeln('=======================================================');
+  delay(2000);
+  END
+ ELSE
+  BEGIN
+  REPEAT
+  clrscr;
+  reset(archivo_sedes);
+  textcolor(green);
+  writeln('PARA DAR DE BAJA UN REGISTRO DEL ARCHIVO, SOLO INGRESE EL NOMBRE DE LA SEDE y el anio correspondiente');
+  writeln('-----------------------------------------------------------------------------------------------------');
+  textcolor(magenta);
+  writeln();
+  writeln('>>> Ingrese codigo internacional: ');
+  readln(cod_int);
+  writeln();
+  anio:= valida_anio_competencia();
+  IF existe_codigo_internacional_anio(cod_int,anio) = true THEN
+   BEGIN
+    registro_sedes.activo:= false;
+    seek(archivo_sedes,filesize(archivo_sedes) - 1);
+    write(archivo_sedes,registro_sedes);
+    textcolor(lightgreen);
+    writeln();
+    writeln('====================================================');
+    writeln('*** EL REGISTRO SE HA DADO DE BAJA CORRECTAMENTE ***');
+    writeln('====================================================');
+    writeln();
+   END
+  ELSE
+   BEGIN
+   textcolor(lightred);
+   writeln();
+   writeln('=========================');
+   writeln('X EL REGISTRO NO EXISTE X');
+   writeln('=========================');
+   writeln();
+   END;
+   REPEAT
+    textcolor(white);
+    writeln('-----------------------------------------------');
+    write('Desea dar de baja otro registro[s/n]?: ');
+    readln(opcion);
+    IF (opcion <> 's') AND (opcion <> 'n') THEN
+     BEGIN
+     textcolor(lightred);
+     writeln();
+     writeln('=======================================');
+     writeln('X VALOR INCORRECTO. VUELVA A INGRESAR X');
+     writeln('=======================================');
+     writeln();
+     END;
+   UNTIL (opcion = 's') OR (opcion = 'n');
+  UNTIL (opcion = 'n');
+  close(archivo_sedes);
+  END;
+ END;
+
 PROCEDURE menu_abm;
 VAR
  opcion: integer;
@@ -851,9 +939,11 @@ VAR
         clrscr;
         menu_altas;
         END;
-     { 2:BEGIN
+      2:BEGIN
+        clrscr;
+        baja_para_el_registro_sedes;
         END;
-      3:BEGIN
+     { 3:BEGIN
         END; }
  END;
  UNTIL (opcion = 4);
