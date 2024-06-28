@@ -797,23 +797,38 @@ VAR
  REPEAT
  clrscr;
  textcolor(lightgreen);
+ gotoxy(whereX, whereY + 10);
+ gotoxy(whereX + 40, whereY);
  writeln('------------------');
+ gotoxy(whereX + 40, whereY);
  writeln('MENU PRINCIPAL ABM');
+ gotoxy(whereX + 40, whereY);
  writeln('------------------');
  writeln();
  textcolor(lightmagenta);
+ gotoxy(whereX +30, whereY);
  writeln('------------------------------------');
+ gotoxy(whereX +30, whereY);
  writeln('1. Altas');
+ gotoxy(whereX +30, whereY);
  writeln('------------------------------------');
+ gotoxy(whereX +30, whereY);
  writeln('2. Bajas(solo para el archivo sedes)');
+ gotoxy(whereX +30, whereY);
  writeln('------------------------------------');
+ gotoxy(whereX +30, whereY);
  writeln('3. Modificaciones(solo para el archivo sedes)');
+ gotoxy(whereX +30, whereY);
  writeln('------------------------------------');
+ gotoxy(whereX +30, whereY);
  writeln('4. Volver al menu principal');
+ gotoxy(whereX +30, whereY);
  writeln('------------------------------------');
  writeln();
  textcolor(yellow);
+ gotoxy(whereX +30, whereY);
  writeln('====================================');
+ gotoxy(whereX +30, whereY);
  write('Seleccione opcion: ');
  readln(opcion);
  CASE opcion OF
