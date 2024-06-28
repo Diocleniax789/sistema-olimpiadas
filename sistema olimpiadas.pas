@@ -825,7 +825,6 @@ VAR
   existe_codigo_internacional_anio:= false;
  END;
 
-
 PROCEDURE baja_para_el_registro_sedes;
 VAR
  anio: integer;
@@ -843,8 +842,8 @@ VAR
   BEGIN
   REPEAT
   clrscr;
-  reset(archivo_sedes);
   textcolor(green);
+  reset(archivo_sedes);
   writeln('PARA DAR DE BAJA UN REGISTRO DEL ARCHIVO, ');
   writeln('SOLO INGRESE EL NOMBRE DE LA SEDE Y EL ANIO CORRESPONDIENTE');
   writeln('-----------------------------------------------------------');
@@ -856,16 +855,29 @@ VAR
   anio:= valida_anio_competencia();
   IF existe_codigo_internacional_anio(cod_int,anio) = true THEN
    BEGIN
-    registro_sedes.activo:= false;
-    seek(archivo_sedes,filesize(archivo_sedes) - 1);
-    write(archivo_sedes,registro_sedes);
-    textcolor(lightgreen);
-    writeln();
-    writeln('====================================================');
-    writeln('*** EL REGISTRO SE HA DADO DE BAJA CORRECTAMENTE ***');
-    writeln('====================================================');
-    writeln();
-    close(archivo_sedes);
+    seek(archivo_sedes,filepos(archivo_sedes) - 1);
+    read(archivo_sedes,registro_sedes);
+    IF registro_sedes.activo = false THEN
+     BEGIN
+     textcolor(yellow);
+     writeln();
+     writeln('===========================');
+     writeln('# ARCHIVO YA DADO DE BAJA #');
+     writeln('===========================');
+     writeln();
+     END
+    ELSE
+     BEGIN
+     registro_sedes.activo:= false;
+     seek(archivo_sedes,filepos(archivo_sedes) - 1);
+     write(archivo_sedes,registro_sedes);
+     textcolor(lightgreen);
+     writeln();
+     writeln('====================================================');
+     writeln('*** EL REGISTRO SE HA DADO DE BAJA CORRECTAMENTE ***');
+     writeln('====================================================');
+     writeln();
+     END;
    END
   ELSE
    BEGIN
@@ -876,6 +888,7 @@ VAR
    writeln('=========================');
    writeln();
    END;
+   close(archivo_sedes);
    REPEAT
     textcolor(white);
     writeln('-----------------------------------------------');
