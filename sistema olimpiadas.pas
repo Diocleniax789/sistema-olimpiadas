@@ -825,23 +825,6 @@ VAR
   existe_codigo_internacional_anio:= false;
  END;
 
-FUNCTION verifica_si_esta_dado_de_baja(cod_int: string; anio: integer): boolean;
-VAR
- f: boolean;
- BEGIN
- f:= false;
- REPEAT
- read(archivo_sedes,registro_sedes);
- IF cod_int = registro_sedes.cod_internacional THEN
-  IF anio = registro_sedes.anio_competencia THEN
-   IF registro_sedes.activo = false THEN
-    f:= true;
- UNTIL eof(archivo_sedes) OR (f = true);
- IF f = true THEN
-  verifica_si_esta_dado_de_baja:= true
- ELSE
-  verifica_si_esta_dado_de_baja:= false;
- END;
 
 PROCEDURE baja_para_el_registro_sedes;
 VAR
@@ -873,18 +856,6 @@ VAR
   anio:= valida_anio_competencia();
   IF existe_codigo_internacional_anio(cod_int,anio) = true THEN
    BEGIN
-   IF verifica_si_esta_dado_de_baja(cod_int,anio) = true THEN
-    BEGIN
-    textcolor(yellow);
-    writeln();
-    writeln('============================');
-    writeln('# REGISTRO YA DADO DE BAJA #');
-    writeln('============================');
-    writeln();
-    close(archivo_sedes);
-    END
-   ELSE
-   BEGIN
     registro_sedes.activo:= false;
     seek(archivo_sedes,filesize(archivo_sedes) - 1);
     write(archivo_sedes,registro_sedes);
@@ -895,7 +866,6 @@ VAR
     writeln('====================================================');
     writeln();
     close(archivo_sedes);
-   END;
    END
   ELSE
    BEGIN
@@ -921,7 +891,7 @@ VAR
      writeln();
      END;
    UNTIL (opcion = 's') OR (opcion = 'n');
-  UNTIL (opcion = 'n');
+   UNTIL (opcion = 'n');
   END;
  END;
 
