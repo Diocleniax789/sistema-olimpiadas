@@ -908,6 +908,115 @@ VAR
   END;
  END;
 
+{ FUNCTION existe_codigo_internacional(cod_int: string): boolean;
+VAR
+ f: boolean;
+ BEGIN
+ f:= false;
+ REPEAT
+ read(archivo_sedes,registro_sedes);
+ IF cod_int = registro_sedes.cod_internacional THEN
+  f:= true;
+ UNTIL eof(archivo_sedes) OR (f = true);
+ IF f = true THEN
+  existe_codigo_internacional:= true
+ ELSE
+  existe_codigo_internacional:= false;
+ END; }
+
+PROCEDURE modificacion_para_el_registro_sedes;
+VAR
+ op: integer;
+ op2,cod_int: string;
+ BEGIN
+ IF verificar_estado_archivo_sedes = true THEN
+  BEGIN
+  textcolor(lightred);
+  writeln();
+  writeln('==============================================');
+  writeln('X EL ARCHIVO SEDES ESTA VACIO. INTENTE LUEGO X');
+  writeln('==============================================');
+  delay(2000);
+  END
+ ELSE
+  BEGIN
+  REPEAT
+  reset(archivo_sedes);
+  writeln('PARA MODIFICAR UN REGISTRO, SOLO INGRESE EL CODIGO INTERNACIONAL');
+  writeln('----------------------------------------------------------------');
+  writeln();
+  write('>>> Ingrese codigo internacional: ');
+  readln(cod_int);
+  IF existe_codigo_internacional(cod_int) = true THEN
+   BEGIN
+   seek(archivo_sedes,filepos(archivo_sedes) - 1);
+   read(archivo_sedes,registro_sedes);
+   writeln();
+   writeln('Que desea modificar? ');
+   writeln('-------------------');
+   writeln('1. Anio de competencia');
+   writeln('2. Descripcion de sede');
+   writeln();
+   write('Seleccione opcion: ');
+   readln(op);
+   CASE op OF
+        1:BEGIN
+          writeln();
+          write('>>> Ingrese anio de competencia a modificar: ');
+          readln(registro_sedes.anio_competencia);
+          seek(archivo_sedes,filepos(archivo_sedes) - 1);
+          write(archivo_sedes,registro_sedes);
+          textcolor(lightgreen);
+          writeln();
+          writeln('=========================================');
+          writeln('*** REGISTRO MODIFICADO CORRECTAMENTE ***');
+          writeln('=========================================');
+          writeln();
+          END;
+        2:BEGIN
+          writeln();
+          write('>>> Ingrese descripcion a modificar: ');
+          readln(registro_sedes.descripcion);
+          seek(archivo_sedes,filepos(archivo_sedes) - 1);
+          write(archivo_sedes,registro_sedes);
+          textcolor(lightgreen);
+          writeln();
+          writeln('=========================================');
+          writeln('*** REGISTRO MODIFICADO CORRECTAMENTE ***');
+          writeln('=========================================');
+          END;
+   END;
+   END
+  ELSE
+   BEGIN
+   textcolor(lightred);
+   writeln();
+   writeln('================================');
+   writeln('X NO EXISTE ESE CODIGO DE SEDE X');
+   writeln('================================');
+   writeln();
+   END;
+   close(archivo_sedes);
+   REPEAT
+   textcolor(lightcyan);
+   writeln();
+   writeln('--------------------------------------');
+   write('Desea modificar otro registro[s/n]?: ');
+   readln(op2);
+   IF (op2 <> 's') AND (op2 <> 'n') THEN
+    BEGIN
+    textcolor(lightred);
+    writeln();
+    writeln('========================================');
+    writeln('X VALOR INCORRECTO. INGRESE NUEVAMENTE X');
+    writeln('========================================');
+    writeln();
+    END;
+   UNTIL (op2 = 's') OR (op2 = 'n');
+  UNTIL (op2 = 'n');
+  END;
+ END;
+
 PROCEDURE menu_abm;
 VAR
  opcion: integer;
@@ -958,8 +1067,10 @@ VAR
         clrscr;
         baja_para_el_registro_sedes;
         END;
-     { 3:BEGIN
-        END; }
+      3:BEGIN
+        clrscr;
+        modificacion_para_el_registro_sedes;
+        END;
  END;
  UNTIL (opcion = 4);
  END;
