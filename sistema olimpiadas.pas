@@ -309,9 +309,9 @@ VAR
    close(archivo_atletas);
    writeln();
    textcolor(lightgreen);
-   writeln('================================================');
-   writeln('*** ATLETA CARGADO CON EXITO Y DADTO DE ALTA ***');
-   writeln('================================================');
+   writeln('===============================================');
+   writeln('*** ATLETA CARGADO CON EXITO Y DADO DE ALTA ***');
+   writeln('===============================================');
    delay(2000);
    END
   ELSE
@@ -330,7 +330,7 @@ VAR
     textcolor(lightred);
     writeln();
     writeln('=================');
-    writeln('X DNI existente X');
+    writeln('X DNI EXISTENTE X');
     writeln('=================');
     END
    ELSE
@@ -925,10 +925,13 @@ VAR
  ELSE
   BEGIN
   REPEAT
+  clrscr;
   reset(archivo_sedes);
+  textcolor(blue);
   writeln('PARA MODIFICAR UN REGISTRO, SOLO INGRESE EL CODIGO INTERNACIONAL');
   writeln('----------------------------------------------------------------');
   writeln();
+  textcolor(white);
   write('>>> Ingrese codigo internacional: ');
   readln(cod_int);
   IF existe_codigo_internacional(cod_int) = true THEN
@@ -938,16 +941,20 @@ VAR
    writeln();
    writeln('Que desea modificar? ');
    writeln('-------------------');
+   writeln();
    writeln('1. Anio de competencia');
+   writeln();
    writeln('2. Descripcion de sede');
    writeln();
+   writeln('-----------------------');
    write('Seleccione opcion: ');
    readln(op);
    CASE op OF
         1:BEGIN
           writeln();
-          write('>>> Ingrese anio de competencia a modificar: ');
-          readln(registro_sedes.anio_competencia);
+          writeln('MODIFIQUE EL ANIO DE COMPETENCIA');
+          writeln('--------------------------------');
+          registro_sedes.anio_competencia:= valida_anio_competencia();
           seek(archivo_sedes,filepos(archivo_sedes) - 1);
           write(archivo_sedes,registro_sedes);
           textcolor(lightgreen);
