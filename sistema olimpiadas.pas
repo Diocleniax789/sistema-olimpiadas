@@ -51,19 +51,19 @@ TYPE
 
 
 VAR
-archivo_atletas: FILE OF atletas;
-registro_atletas: atletas;
-archivo_disciplinas: FILE OF disciplinas;
-registro_disciplinas: disciplinas;
-archivo_participantes: FILE OF participantes;
-registro_participantes: participantes;
-archivo_sedes: FILE OF sedes;
-registro_sedes: sedes;
-archivo_medallasXatletas: FILE OF medallasXatletas;
-registro_medallasXatletas: medallasXatletas;
-tot_medal: total_medallas;
-totali_medallas: total_medallas_por_cada_atleta;
-atletas_lista: lista_atletas;
+   archivo_atletas: FILE OF atletas;
+   registro_atletas: atletas;
+   archivo_disciplinas: FILE OF disciplinas;
+   registro_disciplinas: disciplinas;
+   archivo_participantes: FILE OF participantes;
+   registro_participantes: participantes;
+   archivo_sedes: FILE OF sedes;
+   registro_sedes: sedes;
+   archivo_medallasXatletas: FILE OF medallasXatletas;
+   registro_medallasXatletas: medallasXatletas;
+   tot_medal: total_medallas;
+   totali_medallas: total_medallas_por_cada_atleta;
+   atletas_lista: lista_atletas;
 
 PROCEDURE incializar_arreglo_medallas;
 VAR
