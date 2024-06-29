@@ -224,7 +224,7 @@ VAR
   textcolor(lightred);
   writeln();
   writeln('======================================');
-  writeln('X Fuera de rango. Intente nuevamente X');
+  writeln('X FUERA DE RANGO. INTENTE NUEVAMENTE X');
   writeln('======================================');
   writeln();
   END;
@@ -309,9 +309,9 @@ VAR
    close(archivo_atletas);
    writeln();
    textcolor(lightgreen);
-   writeln('===============================================');
-   writeln('*** Atleta cargado con exito y dado de alta ***');
-   writeln('===============================================');
+   writeln('================================================');
+   writeln('*** ATLETA CARGADO CON EXITO Y DADTO DE ALTA ***');
+   writeln('================================================');
    delay(2000);
    END
   ELSE
@@ -348,9 +348,9 @@ VAR
     close(archivo_atletas);
     writeln();
     textcolor(lightgreen);
-    writeln('===============================================');
-    writeln('*** Atleta cargado con exito y dado de alta ***');
-    writeln('===============================================');
+    writeln('================================================');
+    writeln('*** ATLETA CARGADO CON EXITO Y DADTO DE ALTA ***');
+    writeln('================================================');
     writeln();
    END;
     ordena_atletas_por_DNI();
@@ -364,7 +364,7 @@ VAR
      textcolor(lightred);
      writeln();
      writeln('========================================');
-     writeln('X Valor incorrecto. Ingrese nuevamente X');
+     writeln('X VALOR INCORRECTO. INTENTE NUEVAMENTE X');
      writeln('========================================');
      writeln();
      END;
@@ -399,7 +399,7 @@ VAR
    textcolor(lightred);
    writeln();
    writeln('=========================================');
-   writeln('X Valor incorrecto. Ingrese nuevamente X ');
+   writeln('X VALOR INCORRECTO. INTENTE NUEVAMENTE X ');
    writeln('=========================================');
    END;
   UNTIL (op = 's') OR (op = 'n');
@@ -414,7 +414,7 @@ VAR
   textcolor(lightgreen);
   writeln();
   writeln('===================================================');
-  writeln('*** Disciplina cargada con exito y dada de alta ***');
+  writeln('*** DISCIPLINA CARGADA CON EXITO Y DADA DE ALTA ***');
   writeln('===================================================');
   delay(2000);
   END
@@ -434,7 +434,7 @@ VAR
    textcolor(lightred);
    writeln();
    writeln('============================');
-   writeln('X Competencia ya existente X');
+   writeln('X COMPETENCIA YA EXISTENTE X');
    writeln('============================');
    writeln();
    END
@@ -453,7 +453,7 @@ VAR
     textcolor(lightred);
     writeln();
     writeln('=========================================');
-    writeln('X Valor incorrecto. Ingrese nuevamente X ');
+    writeln('X VALOR INCORRECTO. INGRESE NUEVAMENTE X ');
     writeln('=========================================');
    END;
    UNTIL (op = 's') OR (op = 'n');
@@ -468,7 +468,7 @@ VAR
    textcolor(lightgreen);
    writeln();
    writeln('===================================================');
-   writeln('*** Disciplina cargada con exito y dada de alta ***');
+   writeln('*** DISCIPLINA CARGADA CON EXITO Y DADA DE ALTA ***');
    writeln('===================================================');
    writeln();
    END;
@@ -481,7 +481,7 @@ VAR
     textcolor(lightred);
     writeln();
     writeln('========================================');
-    writeln('X Valor incorrecto. Ingrese nuevamente X');
+    writeln('X VALOR INCORRECTO. INGRESE NUEVAMENTE X');
     writeln('========================================');
     writeln();
     END;
@@ -517,7 +517,7 @@ VAR
   writeln();
   textcolor(lightgreen);
   writeln('=====================================================');
-  writeln('*** Participante cargado con exito y dado de alta ***');
+  writeln('*** PARTICIPANTE CARGADO CON EXITO Y DADO DE ALTA ***');
   writeln('=====================================================');
   delay(2000);
   END
@@ -545,7 +545,7 @@ VAR
   writeln();
   textcolor(lightgreen);
   writeln('=====================================================');
-  writeln('*** Participante cargado con exito y dado de alta ***');
+  writeln('*** PARTICIPANTE CARGADO CON EXITO Y DADO DE ALTA ***');
   writeln('=====================================================');
   writeln();
   REPEAT
@@ -593,7 +593,7 @@ VAR
   writeln();
   textcolor(lightgreen);
   writeln('=============================================');
-  writeln('*** Sede cargada con exito y dada de alta ***');
+  writeln('*** SEDE CARGADA CON EXITO Y DADA DE ALTA ***');
   writeln('=============================================');
   delay(2000);
   END
@@ -613,7 +613,7 @@ VAR
    textcolor(lightred);
    writeln();
    writeln('=====================================');
-   writeln('X Codigo internacional ya existente X');
+   writeln('X CODIGO INTERNACIONAL YA EXISTENTE X');
    writeln('=====================================');
    END
   ELSE
@@ -632,7 +632,7 @@ VAR
    writeln();
    textcolor(lightgreen);
    writeln('=============================================');
-   writeln('*** Sede cargada con exito y dada de alta ***');
+   writeln('*** SEDE CARGADA CON EXITO Y DADA DE ALTA ***');
    writeln('=============================================');
    writeln();
    END;
@@ -646,7 +646,7 @@ VAR
     textcolor(lightred);
     writeln();
     writeln('========================================');
-    writeln('X Valor incorrecto. Ingrese nuevamente X');
+    writeln('X VALOR INCORRECTO. INGRESE NUEVAMENTE X');
     writeln('========================================');
     writeln();
     END;
@@ -665,9 +665,9 @@ VAR
  writeln();
  textcolor(yellow);
  writeln('1. Oro');
- textcolor(brown);
- writeln('2. Plata');
  textcolor(white);
+ writeln('2. Plata');
+ textcolor(brown);
  writeln('3. Bronce');
  writeln();
  writeln('-----------------------');
@@ -714,9 +714,9 @@ VAR
  close(archivo_medallasXatletas);
  writeln();
  textcolor(lightgreen);
- writeln('================================================');
- writeln('*** Atleta cargado con su respectiva medalla ***');
- writeln('================================================');
+ writeln('=================================================');
+ writeln('*** ATLETA CARGADO CON SUS RESPECTIVA MEDALLA ***');
+ writeln('=================================================');
  writeln();
  REPEAT
   write('Desea volver a cargar otro atleta con su medalla[s/n]?: ');
@@ -726,7 +726,7 @@ VAR
    textcolor(lightred);
    writeln();
    writeln('========================================');
-   writeln('X Valor incorrecto. Ingrese nuevamente X');
+   writeln('X VALOR INCORRECTO. INGRESE NUEVAMENTE X');
    writeln('========================================');
    writeln();
    END;
@@ -908,22 +908,6 @@ VAR
   END;
  END;
 
-{ FUNCTION existe_codigo_internacional(cod_int: string): boolean;
-VAR
- f: boolean;
- BEGIN
- f:= false;
- REPEAT
- read(archivo_sedes,registro_sedes);
- IF cod_int = registro_sedes.cod_internacional THEN
-  f:= true;
- UNTIL eof(archivo_sedes) OR (f = true);
- IF f = true THEN
-  existe_codigo_internacional:= true
- ELSE
-  existe_codigo_internacional:= false;
- END; }
-
 PROCEDURE modificacion_para_el_registro_sedes;
 VAR
  op: integer;
@@ -933,9 +917,9 @@ VAR
   BEGIN
   textcolor(lightred);
   writeln();
-  writeln('==============================================');
-  writeln('X EL ARCHIVO SEDES ESTA VACIO. INTENTE LUEGO X');
-  writeln('==============================================');
+  writeln('=======================================================');
+  writeln('X NO HAY REGISTROS EN EL ARCHIVO SEDES. INTENTE LUEGO X');
+  writeln('=======================================================');
   delay(2000);
   END
  ELSE
@@ -1147,9 +1131,9 @@ VAR
  IF verificar_estado_archivo_participantes = true THEN
   BEGIN
   textcolor(lightred);
-  writeln('=========================================================================');
-  writeln('X No hay registros cargados en el archivo participantes por el momento. X');
-  writeln('=========================================================================');
+  writeln('==============================================================================');
+  writeln('X NO HAY REGISTROS EN EL ARCHIVO PARTICIPANTES POR EL MOMENTO. INTENTE LUEGO X');
+  writeln('==============================================================================');
   delay(2000);
   END
  ELSE
@@ -1157,9 +1141,9 @@ VAR
   IF verificar_estado_archivo_sedes = true THEN
    BEGIN
    textcolor(lightred);
-   writeln('=================================================================');
-   writeln('X No hay registros cargados en el archivo sedes por el momento. X');
-   writeln('=================================================================');
+   writeln('=======================================================');
+   writeln('X NO HAY REGISTROS EN EL ARCHIVO SEDES. INTENTE LUEGO X');
+   writeln('=======================================================');
    delay(2000);
    END
   ELSE
@@ -1185,7 +1169,7 @@ VAR
     BEGIN
     textcolor(lightred);
     writeln('========================================');
-    writeln('X Valor incorrecto. Ingrese nuevamente X');
+    writeln('X VALOR INCORRECTO. INGRESE NUEVAMENTE X');
     writeln('========================================');
     END;
    UNTIL (opcion = 's') OR (opcion = 'n');
@@ -1240,9 +1224,9 @@ VAR
  IF verifica_estado_archivo_medallasXatletas = true THEN
   BEGIN
   textcolor(lightred);
-  writeln('============================================================');
-  writeln('X El archivo de medallas se encuentra vacio. Intente Luego X');
-  writeln('============================================================');
+  writeln('=========================================================================');
+  writeln('X NO HAY REGISTROS EN EL ARCHIVO MEDALLAS POR EL MOMENTO. INTENTE LUEGO X');
+  writeln('=========================================================================');
   delay(2000);
   END
  ELSE
@@ -1268,7 +1252,7 @@ VAR
     writeln();
     textcolor(lightred);
     writeln('========================================');
-    writeln('X Valor incorrecto. Ingrese nuevamente X');
+    writeln('X VALOR INCORRECTO. INTENTE NUEVAMENTE X');
     writeln('========================================');
     END;
    UNTIL (opcion = 's') OR (opcion = 'n');
@@ -1299,9 +1283,9 @@ VAR
  IF verificar_estado_archivo_disciplinas = true THEN
   BEGIN
   textcolor(lightred);
-  writeln('===============================================================');
-  writeln('X El archivo de disciplinas se encuentra vacio. Intente luego X');
-  writeln('===============================================================');
+  writeln('============================================================================');
+  writeln('X NO HAY REGISTROS EN EL ARCHIVO DISCIPLINAS POR EL MOMENTO. INTENTE LUEGO X');
+  writeln('============================================================================');
   delay(2000);
   END
  ELSE
@@ -1325,7 +1309,7 @@ VAR
    textcolor(lightred);
    writeln();
    writeln('========================================');
-   writeln('X Valor incorrecto. Ingrese nuevamente X');
+   writeln('X VALOR INCORRECTO. INTENTE NUEVAMENTE X');
    writeln('========================================');
    writeln();
    END;
@@ -1455,9 +1439,9 @@ VAR
  IF verifica_estado_archivo_atletas = true THEN
   BEGIN
   textcolor(lightred);
-  writeln('==========================================================');
-  writeln('X El archivo atletas no contiene registro. Intente luego X');
-  writeln('==========================================================');
+  writeln('========================================================================');
+  writeln('X NO HAY REGISTROS EN EL ARCHIVO ATLETAS POR EL MOMENTO. INTENTE LUEGO X');
+  writeln('========================================================================');
   close(archivo_atletas);
   delay(2000);
   END
@@ -1481,7 +1465,7 @@ VAR
    BEGIN
    textcolor(lightred);
    writeln('========================');
-   writeln('X No existe ese atleta X');
+   writeln('X NO EXISTE ESE ATLETA X');
    writeln('========================');
    writeln();
    END;
@@ -1494,7 +1478,7 @@ VAR
    textcolor(lightred);
    writeln();
    writeln('========================================');
-   writeln('X Valor incorrecto. Ingrese nuevamente X');
+   writeln('X VALOR INCORRECTO. INGRESE NUEVAMENTE X');
    writeln('========================================');
    writeln();
    END;
@@ -1537,9 +1521,9 @@ VAR
  IF verificar_estado_archivo_participantes = true THEN
   BEGIN
   textcolor(lightred);
-  writeln('=========================================================');
-  writeln('X El archivo de participantes esta vacio. Intente luego X');
-  writeln('=========================================================');
+  writeln('==============================================================================');
+  writeln('X NO HAY REGISTROS EN EL ARCHIVO PARTICIPANTES POR EL MOMENTO. INTENTE LUEGO X');
+  writeln('==============================================================================');
   delay(2000);
   END
  ELSE
@@ -1561,7 +1545,7 @@ VAR
    textcolor(lightred);
    writeln();
    writeln('========================================');
-   writeln('X Valor incorrecto. Ingrese nuevamente X');
+   writeln('X VALOR INCORRECTO. INGRESE NUEVAMENTE X');
    writeln('========================================');
    writeln();
    END;
@@ -1624,9 +1608,9 @@ PROCEDURE muestra_mayor_sede;
  IF verifica_estado_archivo_medallasXatletas = true THEN
   BEGIN
   textcolor(lightred);
-  writeln('========================================');
-  writeln('X El archivo esta vacio. Intente luego X');
-  writeln('========================================');
+  writeln('=========================================================================');
+  writeln('X NO HAY REGISTROS EN EL ARCHIVO MEDALLAS POR EL MOMENTO. INTENTE LUEGO X');
+  writeln('=========================================================================');
   delay(2000);
   END
  ELSE
@@ -1807,9 +1791,9 @@ VAR
   IF verifica_estado_archivo_medallasXatletas = true THEN
    BEGIN
    textcolor(lightred);
-   writeln('========================================');
-   writeln('X El archivo esta vacio. Intente luego X');
-   writeln('========================================');
+   writeln('=========================================================================');
+   writeln('X NO HAY REGISTROS EN EL ARCHIVO MEDALLAS POR EL MOMENTO. INTENTE LUEGO X');
+   writeln('=========================================================================');
    delay(2000);
    END
   ELSE
